@@ -18,7 +18,9 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', ['Usuario', 'Nutricionista', 'Personal', 'Admin'])->nullable();
-            $table->enum('validacao', ['pendente', 'validado', 'recusado']);
+            $table->string('peso')->nullable();
+            $table->string('altura')->nullable();
+            $table->enum('validacao', ['pendente', 'validado', 'recusado'])->default('pendete');
             $table->rememberToken();
             $table->timestamps();
         });
