@@ -6,13 +6,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ValidationController;
 
 
-Route::get('/', function () {
-    return view('auth');
-})->name('AuthView');
+Route::get('/auth', function () {
+    return view('auth'); 
+});
 
-// Página com o formulário de validação do CRN
+
 Route::get('/crn/formulario', function () {
-    return view('crn'); // nome do seu arquivo Blade (ex: resources/views/crn-formulario.blade.php)
+    return view('crn'); 
 })->name('crn.formulario');
 
 // Validação do CRN (via POST do form)
@@ -22,7 +22,16 @@ Route::post('/crn/validar', [ValidarController::class, 'validarCrn'])->name('crn
 Route::post('/crn/salvar', [ValidarController::class, 'salvarCrn'])->name('crn.salvar');
 
 
-Route::post('/register', [AuthController::class, 'register'])->name('cadastro');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-Route::post('/logout', [AuthController::class, 'login'])->name('login')->middleware('auth');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+Route::middleware('auth')->group(function () {
+    Route::post('/user/{user}/definir-carac', [AuthController::class, 'definirCarac'])
+        ->name('user.definirCarac');
+});
+
+Route::get('/sobrevoce', function () {
+    return view('sobrevoce');
+})->name('sobrevoce');

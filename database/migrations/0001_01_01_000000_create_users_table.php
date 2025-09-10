@@ -20,7 +20,8 @@ return new class extends Migration
             $table->enum('role', ['Usuario', 'Nutricionista', 'Personal', 'Admin'])->nullable();
             $table->string('peso')->nullable();
             $table->string('altura')->nullable();
-            $table->enum('validacao', ['pendente', 'validado', 'recusado'])->default('pendete');
+            $table->integer('idade')->nullable();
+            $table->enum('validacao', ['pendente', 'validado', 'recusado'])->default('pendente');
             $table->rememberToken();
             $table->timestamps();
         });

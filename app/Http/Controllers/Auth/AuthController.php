@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    public function register(Request $request){
+    public function register(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
@@ -27,21 +28,24 @@ class AuthController extends Controller
             'min' => 'A senha deve ter 8 caracteres'
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
 
+        Auth::login($user);
 
-        return redirect()->route('SobreVoce');
+
+        return redirect()->route('sobrevoce');
     }
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required|string'
@@ -51,20 +55,21 @@ class AuthController extends Controller
             'email' => 'Email inválido',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
         $credenciais = $request->only('email', 'password');
 
-        if(Auth::attempt($credenciais)){
+        if (Auth::attempt($credenciais)) {
             $request->session()->regenerate();
             return redirect()->route('Home');
         }
         return redirect()->back()->withErrors('Credenciais inválidas')->withInput();
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         Auth::logout();
 
         $request->session()->invalidate();
@@ -72,5 +77,29 @@ class AuthController extends Controller
 
         return redirect()->route('AuthView');
     }
-    
+
+
+
+
+    public function definirCarac(Request $request, User $user)
+    {
+        // validação dos dados
+        $validated = $request->validate([
+            'peso'   => 'nullable|string|max:10',   // pode ajustar para decimal se quiser
+            'altura' => 'nullable|string|max:10',
+            'idade'  => 'nullable|integer|min:0',
+        ], [
+            'idade.integer' => 'A idade deve ser um número inteiro.',
+            'idade.min'     => 'A idade não pode ser negativa.',
+        ]);
+
+        // atualiza os campos
+        $user->update([
+            'peso'   => $validated['peso']   ?? $user->peso,
+            'altura' => $validated['altura'] ?? $user->altura,
+            'idade'  => $validated['idade']  ?? $user->idade,
+        ]);
+
+        return redirect()->back()->with('success', 'Características atualizadas com sucesso!');
+    }
 }
