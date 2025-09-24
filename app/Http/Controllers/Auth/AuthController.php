@@ -41,7 +41,7 @@ class AuthController extends Controller
         Auth::login($user);
 
 
-        return redirect()->route('sobrevoce');
+        return redirect()->route('sobrevoce.crn');
     }
 
     public function login(Request $request)
@@ -63,7 +63,8 @@ class AuthController extends Controller
 
         if (Auth::attempt($credenciais)) {
             $request->session()->regenerate();
-            return redirect()->route('Home');
+
+            return redirect()->route('posts.index');
         }
         return redirect()->back()->withErrors('Credenciais inválidas')->withInput();
     }
@@ -100,6 +101,6 @@ class AuthController extends Controller
             'idade'  => $validated['idade']  ?? $user->idade,
         ]);
 
-        return redirect()->back()->with('success', 'Características atualizadas com sucesso!');
+        return redirect()->route('posts.index');
     }
 }

@@ -1,18 +1,25 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ValidarController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ValidationController;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\CommentController;
 
 
-Route::get('/auth', function () {
-    return view('auth'); 
+Route::get('/', function () {
+    return view('home');
 });
+
+Route::get('/login', function () {
+    return view('auth');
+})->name('login');
 
 
 Route::get('/crn/formulario', function () {
-    return view('crn'); 
+    return view('crn');
 })->name('crn.formulario');
 
 // Validação do CRN (via POST do form)
@@ -34,4 +41,19 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/sobrevoce', function () {
     return view('sobrevoce');
-})->name('sobrevoce');
+})->name('sobrevoce.crn');
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/feed', [PostController::class, 'index'])->name('posts.index');
+    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+});
+
+
+Route::post('/posts/{post}/like-ajax', [PostController::class, 'likeAjax'])->name('posts.like.ajax');
+
+Route::post('/posts/{post}/like', [LikeController::class, 'toggle'])->name('posts.like');
+Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+

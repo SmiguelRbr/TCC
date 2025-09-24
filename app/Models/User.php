@@ -21,6 +21,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'peso',
+        'altura',
+        'idade',
+        'validacao',
         'role',
     ];
 
@@ -52,5 +56,19 @@ class User extends Authenticatable
         return $this->hasOne(CrefRegistros::class);
     }
 
-    
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
 }
