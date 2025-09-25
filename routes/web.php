@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ValidationController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ProfileController;
 
 
 Route::get('/', function () {
@@ -56,4 +57,17 @@ Route::post('/posts/{post}/like-ajax', [PostController::class, 'likeAjax'])->nam
 Route::post('/posts/{post}/like', [LikeController::class, 'toggle'])->name('posts.like');
 Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+
+
+
+Route::get('/perfil', [ProfileController::class, 'show'])->name('profile.show')->middleware('auth');
+
+Route::post('/toggle-theme', function () {
+    $current = session('theme', 'light');
+    $new = $current === 'light' ? 'dark' : 'light';
+    session(['theme' => $new]);
+    return back();
+})->name('toggle.theme');
+
 

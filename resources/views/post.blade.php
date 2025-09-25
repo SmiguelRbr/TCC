@@ -893,6 +893,250 @@
         .like-btn:focus {
             outline: none;
         }
+
+        .sidebar-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+
+        .motivational-quote {
+            background: var(--gradient);
+            color: var(--white);
+            text-align: center;
+            font-style: italic;
+            line-height: 1.8;
+        }
+
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--primary-light);
+        }
+
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+
+        .rank {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--gradient);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+
+        .challenge-card {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+            color: var(--white);
+            text-align: center;
+        }
+
+
+        .challenge-progress {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+
+        .progress-bar {
+            height: 100%;
+            background: var(--white);
+            border-radius: 4px;
+            width: 65%;
+            animation: progressGrow 2s ease-out;
+        }
+
+
+        @keyframes progressGrow {
+            from {
+                width: 0%;
+            }
+
+
+            to {
+                width: 65%;
+            }
+        }
+
+
+        .floating-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient);
+            color: var(--white);
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-hover);
+            transition: var(--transition);
+            z-index: 50;
+        }
+
+
+        .floating-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+        }
+
+
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 0 1rem;
+                gap: 1rem;
+            }
+
+
+            .header-content {
+                padding: 0 1rem;
+            }
+
+
+            .create-post,
+            .feed-post,
+            .sidebar-card {
+                padding: 1rem;
+            }
+        }
+
+
+
+
+        @media (max-width: 650px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 0 1rem;
+                gap: 1rem;
+            }
+
+
+            .header-content {
+                padding: 0 1rem;
+            }
+
+
+            .create-post,
+            .feed-post,
+            .sidebar-card,
+            .post-actions {
+                width: auto;
+                max-width: 100%;
+                height: auto;
+            }
+
+
+            .post-actions {
+                width: auto;
+                max-width: 70%;
+            }
+
+
+        }
+
+
+        @media (max-width: 1115px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 0 1rem;
+                gap: 1rem;
+            }
+
+
+            .header-content {
+                padding: 0 1rem;
+            }
+
+
+            .create-post,
+            .feed-post,
+            .sidebar-card {
+                padding: 1rem;
+            }
+
+
+            .header {
+                padding: 1rem 0;
+            }
+        }
+
+
+        .nutrition-tip {
+            background: linear-gradient(135deg, var(--primary-light) 0%, rgba(6, 214, 160, 0.1) 100%);
+            border-left: 4px solid var(--primary);
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+
+        .tip-icon {
+            color: var(--primary);
+            margin-right: 0.5rem;
+        }
+
+
+        .post-actions {
+            display: flex;
+            flex-wrap: wrap;
+            /* permite que quebre linha se necessário */
+            gap: 0.5rem;
+            /* espaço entre os botões */
+            width: 100%;
+            /* ou auto, conforme preferir */
+            max-width: 90%;
+            /* igual ao container pai para não ultrapassar */
+            justify-content: space-between;
+            /* para distribuir o espaço */
+            box-sizing: border-box;
+            /* para incluir padding na largura */
+        }
+
+
+        .post-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            flex-grow: 1;
+        }
+
+
+        .post-option,
+        .post-btn {
+            flex: 1 1 auto;
+            /* cresce e encolhe conforme o espaço */
+            min-width: 100px;
+            /* evita que fiquem muito pequenos */
+            box-sizing: border-box;
+        }
     </style>
 </head>
 
@@ -1074,6 +1318,10 @@
         </aside>
     </div>
 
+
+
+
+
     <!-- Sidebar de Comentários -->
     <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeCommentsSidebar()"></div>
 
@@ -1117,7 +1365,7 @@
             @endif
         </div>
 
-        <form method="POST" action="{{ route('comments.store', $post) }}" class="sidebar-comment-form">
+        <form method="POST" action="{{ route('comments.store', $post) }}" class="sidebar-comment-form" onsubmit="event.preventDefault(); saveScrollPositionAndSubmit(event, this);">
             @csrf
             <div class="form-avatar">{{ strtoupper(auth()->user()->name[0] . auth()->user()->name[1]) }}</div>
             <div class="comment-input-wrapper">
@@ -1139,6 +1387,14 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+
+            const scrollY = localStorage.getItem('scrollY');
+            if (scrollY !== null) {
+                window.scrollTo(0, parseInt(scrollY));
+                localStorage.removeItem('scrollY');
+            }
+
+
             document.querySelectorAll('.like-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const postId = this.getAttribute('data-post-id');
@@ -1296,8 +1552,9 @@
             e.stopPropagation();
         });
 
-        function saveScrollPosition() {
+        function saveScrollPositionAndSubmit(event, form) {
             localStorage.setItem('scrollY', window.scrollY);
+            form.submit();
         }
 
         document.addEventListener('DOMContentLoaded', function() {
