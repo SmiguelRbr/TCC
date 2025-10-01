@@ -33,7 +33,7 @@ Route::post('/crn/salvar', [ValidarController::class, 'salvarCrn'])->name('crn.s
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::post('/user/{user}/definir-carac', [AuthController::class, 'definirCarac'])
@@ -42,7 +42,10 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/sobrevoce', function () {
     return view('sobrevoce');
-})->name('sobrevoce.crn');
+})->name('sobrevoce.form');
+
+// POST para salvar o CRN
+Route::post('/sobrevoce', [ValidarController::class, 'salvarCrn'])->name('sobrevoce.crn');
 
 
 Route::middleware(['auth'])->group(function () {
@@ -59,9 +62,21 @@ Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
 
+Route::middleware(['auth'])->group(function () {
+    // Exibir perfil
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+
+    // Exibir formulário de edição do perfil
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+
+    // Atualizar perfil
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
 
-Route::get('/perfil', [ProfileController::class, 'show'])->name('profile.show')->middleware('auth');
+
+    // Alternar modo escuro
+    Route::post('/profile/dark-mode', [ProfileController::class, 'toggleDarkMode'])->name('profile.toggle-dark-mode');
+});
 
 Route::post('/toggle-theme', function () {
     $current = session('theme', 'light');
@@ -71,3 +86,15 @@ Route::post('/toggle-theme', function () {
 })->name('toggle.theme');
 
 
+use App\Http\Controllers\CalculatorController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/calculadoras/imc', [CalculatorController::class, 'imc'])->name('calculators.imc');
+    Route::get('/calculadoras/calorias', [CalculatorController::class, 'calorias'])->name('calculators.calorias');
+    Route::get('/calculadoras/agua', [CalculatorController::class, 'agua'])->name('calculators.agua');
+    Route::get('/calculadoras/composicao', [CalculatorController::class, 'composicao'])->name('calculators.composicao');
+    Route::get('/calculadoras/macros', [CalculatorController::class, 'macros'])->name('calculators.macros');
+    Route::get('/calculadoras/vo2max', [CalculatorController::class, 'vo2max'])->name('calculators.vo2max');
+    Route::get('/calculadoras/bf-avancado', [CalculatorController::class, 'bfAvancado'])->name('calculators.bf-avancado');
+    Route::get('/calculadoras/periodizacao', [CalculatorController::class, 'periodizacao'])->name('calculators.periodizacao');
+});

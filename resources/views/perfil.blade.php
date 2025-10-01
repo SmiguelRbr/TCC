@@ -1,657 +1,742 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="{{ auth()->check() && auth()->user()->dark_mode ? 'dark' : '' }}">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/perfilperso.css">
-    <title>Grovy - Perfil</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil - Grovy</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #10B981;
+      --primary-dark: #059669;
+      --primary-light: #D1FAE5;
+      --accent: #06D6A0;
+      --secondary: #118AB2;
+      --gradient: linear-gradient(135deg, #10B981 0%, #06D6A0 100%);
+      --gradient-dark: linear-gradient(135deg, #059669 0%, #047857 100%);
+      --text-dark: #1F2937;
+      --text-gray: #6B7280;
+      --bg: #F9FAFB;
+      --white: #FFFFFF;
+      --card-bg: #FFFFFF;
+      --header-bg: rgba(255, 255, 255, 0.95);
+      --header-border: rgba(16, 185, 129, 0.1);
+      --card-border: rgba(16, 185, 129, 0.1);
+      --section-bg: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(6, 214, 160, 0.05) 100%);
+      --shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
+      --shadow-hover: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+      --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
+      --border-radius: 16px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --max-width: 1200px;
+    }
+
+    :root.dark {
+      --primary: #8B5CF6;
+      --primary-dark: #7C3AED;
+      --primary-light: #6D28D9;
+      --accent: #EC4899;
+      --secondary: #3B82F6;
+      --gradient: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+      --gradient-dark: linear-gradient(135deg, #7C3AED 0%, #DB2777 100%);
+      --text-dark: #F9FAFB;
+      --text-gray: #9CA3AF;
+      --bg: #0F172A;
+      --white: #1E293B;
+      --card-bg: #1E293B;
+      --header-bg: rgba(30, 41, 59, 0.95);
+      --header-border: rgba(139, 92, 246, 0.2);
+      --card-border: rgba(139, 92, 246, 0.2);
+      --section-bg: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+      --shadow: 0 20px 25px -5px rgb(139 92 246 / 0.15), 0 10px 10px -5px rgb(0 0 0 / 0.3);
+      --shadow-hover: 0 25px 50px -12px rgb(139 92 246 / 0.25);
+      --shadow-sm: 0 4px 6px rgba(139, 92, 246, 0.1);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text-dark);
+      line-height: 1.7;
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 90%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header */
+    header {
+      background: var(--header-bg);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--header-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transition: var(--transition);
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      min-height: 80px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+    }
+
+    .logo-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .logo-text span {
+      font-size: 13px;
+      color: var(--text-gray);
+      font-weight: 500;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    nav a {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 12px 18px;
+      border-radius: 10px;
+      transition: var(--transition);
+    }
+
+    nav a:not(.btn):hover {
+      color: var(--primary);
+      background: var(--card-border);
+    }
+
+    nav .btn {
+      background: var(--gradient);
+      color: white;
+      font-weight: 600;
+      box-shadow: var(--shadow-sm);
+    }
+
+    nav .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    /* Profile Section */
+    .profile-section {
+      padding: 60px 0 40px;
+    }
+
+    .profile-header {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 40px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 48px;
+      font-weight: bold;
+      flex-shrink: 0;
+      box-shadow: var(--shadow);
+    }
+
+    .profile-info h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .profile-info p {
+      color: var(--text-gray);
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .profile-stats {
+      display: flex;
+      gap: 30px;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-gray);
+      margin-top: 4px;
+    }
+
+    /* Calculators Grid */
+    .calculators-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    .calculator-card {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 32px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--card-border);
+      transition: var(--transition);
+    }
+
+    .calculator-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+
+    .calculator-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .calculator-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--gradient);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+    }
+
+    .calculator-header h2 {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--text-dark);
+      font-size: 14px;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--card-border);
+      border-radius: 10px;
+      font-size: 16px;
+      background: var(--bg);
+      color: var(--text-dark);
+      transition: var(--transition);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .calc-button {
+      width: 100%;
+      padding: 14px;
+      background: var(--gradient);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 10px;
+    }
+
+    .calc-button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .result-box {
+      margin-top: 20px;
+      padding: 20px;
+      background: var(--section-bg);
+      border-radius: 12px;
+      border: 2px solid var(--card-border);
+      display: none;
+    }
+
+    .result-box.show {
+      display: block;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    .result-value {
+      font-size: 32px;
+      font-weight: 700;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .result-label {
+      color: var(--text-gray);
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .result-info {
+      color: var(--text-dark);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--card-bg);
+      color: var(--text-dark);
+      text-align: center;
+      padding: 40px 0;
+      margin-top: 80px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    footer p {
+      opacity: 0.8;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .profile-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .profile-stats {
+        justify-content: center;
+      }
+
+      .calculators-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
-            background: linear-gradient(135deg, #ffffff 0%, #e8f7e8 100%);
-            min-height: 100vh;
-            padding: 20px;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-
-        /* Animated background particles */
-        .bg-particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 0;
-        }
-
-
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-        }
-
-
-        .particle:nth-child(1) {
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .particle:nth-child(2) {
-            left: 20%;
-            animation-delay: 1s;
-        }
-
-        .particle:nth-child(3) {
-            left: 30%;
-            animation-delay: 2s;
-        }
-
-        .particle:nth-child(4) {
-            left: 40%;
-            animation-delay: 3s;
-        }
-
-        .particle:nth-child(5) {
-            left: 50%;
-            animation-delay: 4s;
-        }
-
-        .particle:nth-child(6) {
-            left: 60%;
-            animation-delay: 5s;
-        }
-
-        .particle:nth-child(7) {
-            left: 70%;
-            animation-delay: 0.5s;
-        }
-
-        .particle:nth-child(8) {
-            left: 80%;
-            animation-delay: 1.5s;
-        }
-
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-
-            10% {
-                opacity: 1;
-            }
-
-            90% {
-                opacity: 1;
-            }
-
-            100% {
-                transform: translateY(-10px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            z-index: 1;
-            animation: slideUp 0.6s ease-out;
-        }
-
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(50px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-
-        .header {
-            text-align: center;
-            padding: 30px 0 20px;
-            background: linear-gradient(135deg, #2AFF8A 0%, #00b894 100%);
-            position: relative;
-            overflow: hidden;
-        }
-
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            animation: shine 3s infinite;
-        }
-
-
-        @keyframes shine {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-
-        .logo-image {
-            width: 140px;
-            height: 140px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-
-        .logo-image:hover {
-            transform: scale(1.05);
-        }
-
-
-        .profile-section {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            position: relative;
-            backdrop-filter: blur(10px);
-        }
-
-
-        .profile-avatar {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, #2AFF8A, #00b894);
-            border-radius: 50%;
-            margin: 0 auto 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 4px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 10px 30px rgba(42, 255, 138, 0.3);
-            position: relative;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-
-        .profile-avatar:hover {
-            transform: scale(1.1);
-            box-shadow: 0 15px 40px rgba(42, 255, 138, 0.5);
-        }
-
-
-        .profile-avatar::after {
-            content: '';
-            position: absolute;
-            top: -4px;
-            left: -4px;
-            right: -4px;
-            bottom: -4px;
-            background: linear-gradient(45deg, #2AFF8A, #00b894, #2AFF8A);
-            border-radius: 50%;
-            z-index: -1;
-            animation: rotate 3s linear infinite;
-        }
-
-
-        @keyframes rotate {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-
-        .profile-avatar svg {
-            width: 50px;
-            height: 50px;
-            fill: white;
-        }
-
-
-        .profile-info {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-
-        .profile-info h2 {
-            font-size: 28px;
-            color: #2d3436;
-            margin-bottom: 10px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #2d3436, #636e72);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-
-        .profile-details {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-
-        .detail-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #636e72;
-            font-size: 14px;
-            padding: 8px 16px;
-            background: rgba(42, 255, 138, 0.1);
-            border-radius: 20px;
-            border: 1px solid rgba(42, 255, 138, 0.2);
-            transition: all 0.3s ease;
-        }
-
-
-        .detail-item:hover {
-            background: rgba(42, 255, 138, 0.2);
-            transform: translateY(-2px);
-        }
-
-
-        .stats {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 30px;
-        }
-
-
-        .stat-item {
-            text-align: center;
-        }
-
-
-        .stat-number {
-            font-size: 24px;
-            font-weight: 700;
-            color: #2AFF8A;
-            display: block;
-        }
-
-
-        .stat-label {
-            font-size: 12px;
-            color: #636e72;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-
-        .btn {
-            padding: 14px 28px;
-            border: none;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            min-width: 120px;
-        }
-
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-
-        .btn-follow {
-            background: linear-gradient(135deg, #2AFF8A, #00b894);
-            color: white;
-            box-shadow: 0 4px 15px rgba(42, 255, 138, 0.4);
-        }
-
-
-        .btn-follow:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(42, 255, 138, 0.6);
-        }
-
-
-        .btn-message {
-            background: transparent;
-            color: #2AFF8A;
-            border: 2px solid #2AFF8A;
-        }
-
-
-        .btn-message:hover {
-            background: #2AFF8A;
-            color: white;
-            transform: translateY(-2px);
-        }
-
-
-        .btn-hire {
-            background: linear-gradient(135deg, #fd79a8, #e84393);
-            color: white;
-            box-shadow: 0 4px 15px rgba(253, 121, 168, 0.4);
-        }
-
-
-        .btn-hire:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(253, 121, 168, 0.6);
-        }
-
-
-        .gallery {
-            padding: 30px;
-            background: #fffffff2;
-            box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.03);
-            border-top: 3px solid rgba(0, 0, 0, 0.05);
-            border-top-left-radius: 30px;
-            border-top-right-radius: 30px;
-
-        }
-
-
-        .gallery h3 {
-            color: #2d3436;
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-        }
-
-
-        .gallery-item {
-            aspect-ratio: 1;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 20px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-
-        .gallery-item:hover {
-            transform: scale(1.05) rotate(2deg);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-        }
-
-
-        .gallery-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
-            background-size: 200% 200%;
-            animation: shimmer 3s infinite;
-        }
-
-
-        @keyframes shimmer {
-            0% {
-                background-position: -200% -200%;
-            }
-
-            100% {
-                background-position: 200% 200%;
-            }
-        }
-
-
-        .gallery-item.large {
-            grid-row: span 2;
-            aspect-ratio: 1/2;
-        }
-
-
-        .gallery-item::after {
-            content: '📸';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 2rem;
-            opacity: 0.7;
-        }
-
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .container {
-                margin: 10px;
-                border-radius: 20px;
-            }
-
-            .profile-section {
-                padding: 30px 20px;
-            }
-
-            .profile-details {
-                flex-direction: column;
-                align-items: center;
-                gap: 10px;
-            }
-
-            .stats {
-                gap: 20px;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-            }
-        }
-
-
-        /* Success animation for interactions */
-        .btn.clicked {
-            animation: pulse 0.6s ease;
-        }
-
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.1);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-    </style>
-    <!-- Animated background particles -->
-    <div class="bg-particles">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <div class="logo-icon">
+          <img src="https://encurtador.com.br/JO1pP" alt="Grovy">
+        </div>
+        <div class="logo-text">
+          <span>Saúde & Aconselhamento</span>
+        </div>
+      </div>
+      <nav>
+
+        <a href="{{ route('posts.index') }}">Feed</a>
+        @guest
+        <a href="{{ route('login') }}" class="btn">Entrar</a>
+        @else
+        <a href="{{ route('logout') }}" class="btn">Sair</a>
+        @endguest
+      </nav>
     </div>
+  </header>
 
+  <main>
+    <section class="profile-section container">
+      <!-- Profile Header -->
+      <div class="profile-header">
+        <div class="profile-avatar">
+          @auth
+          {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+          @else
+          U
+          @endauth
+        </div>
+        <div class="profile-info">
+          <h1>@auth {{ auth()->user()->name }} @else Usuário @endauth</h1>
+          <p>@auth {{ auth()->user()->email }} @else Entre para ver suas informações @endauth</p>
+          <div class="profile-stats">
+            <div class="stat">
+              <span class="stat-value">12</span>
+              <span class="stat-label">Dias ativos</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">8</span>
+              <span class="stat-label">Metas alcançadas</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">24</span>
+              <span class="stat-label">Dicas salvas</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <!-- Calculators -->
+      <div class="calculators-grid">
+        <!-- IMC Calculator -->
+        <div class="calculator-card">
+          <div class="calculator-header">
+            <div class="calculator-icon">📊</div>
+            <h2>Calculadora de IMC</h2>
+          </div>
+          <form id="imcForm" onsubmit="calcularIMC(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Peso (kg)</label>
+                <input type="number" id="peso" step="0.1" required placeholder="Ex: 70">
+              </div>
+              <div class="form-group">
+                <label>Altura (m)</label>
+                <input type="number" id="altura" step="0.01" required placeholder="Ex: 1.75">
+              </div>
+            </div>
+            <button type="submit" class="calc-button">Calcular IMC</button>
+          </form>
+          <div id="imcResult" class="result-box">
+            <div class="result-value" id="imcValue"></div>
+            <div class="result-label">Seu IMC</div>
+            <div class="result-info" id="imcInfo"></div>
+          </div>
+        </div>
+
+        <!-- TMB Calculator -->
+        <div class="calculator-card">
+          <div class="calculator-header">
+            <div class="calculator-icon">🔥</div>
+            <h2>Taxa Metabólica Basal</h2>
+          </div>
+          <form id="tmbForm" onsubmit="calcularTMB(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Peso (kg)</label>
+                <input type="number" id="pesoTMB" step="0.1" required placeholder="Ex: 70">
+              </div>
+              <div class="form-group">
+                <label>Altura (cm)</label>
+                <input type="number" id="alturaTMB" required placeholder="Ex: 175">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Idade</label>
+                <input type="number" id="idade" required placeholder="Ex: 30">
+              </div>
+              <div class="form-group">
+                <label>Sexo</label>
+                <select id="sexo" required>
+                  <option value="">Selecione</option>
+                  <option value="masculino">Masculino</option>
+                  <option value="feminino">Feminino</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" class="calc-button">Calcular TMB</button>
+          </form>
+          <div id="tmbResult" class="result-box">
+            <div class="result-value" id="tmbValue"></div>
+            <div class="result-label">Calorias/dia em repouso</div>
+            <div class="result-info" id="tmbInfo"></div>
+          </div>
+        </div>
+
+        <!-- Water Calculator -->
+        <div class="calculator-card">
+          <div class="calculator-header">
+            <div class="calculator-icon">💧</div>
+            <h2>Hidratação Diária</h2>
+          </div>
+          <form id="aguaForm" onsubmit="calcularAgua(event)">
+            <div class="form-group">
+              <label>Peso (kg)</label>
+              <input type="number" id="pesoAgua" step="0.1" required placeholder="Ex: 70">
+            </div>
+            <div class="form-group">
+              <label>Nível de atividade</label>
+              <select id="atividade" required>
+                <option value="">Selecione</option>
+                <option value="sedentario">Sedentário</option>
+                <option value="leve">Atividade leve</option>
+                <option value="moderado">Atividade moderada</option>
+                <option value="intenso">Atividade intensa</option>
+              </select>
+            </div>
+            <button type="submit" class="calc-button">Calcular Hidratação</button>
+          </form>
+          <div id="aguaResult" class="result-box">
+            <div class="result-value" id="aguaValue"></div>
+            <div class="result-label">Litros de água por dia</div>
+            <div class="result-info" id="aguaInfo"></div>
+          </div>
+        </div>
+
+        <!-- Calorie Goal Calculator -->
+        <div class="calculator-card">
+          <div class="calculator-header">
+            <div class="calculator-icon">🎯</div>
+            <h2>Meta Calórica</h2>
+          </div>
+          <form id="metaForm" onsubmit="calcularMeta(event)">
+            <div class="form-group">
+              <label>TMB (calorias/dia)</label>
+              <input type="number" id="tmbMeta" required placeholder="Ex: 1800">
+            </div>
+            <div class="form-group">
+              <label>Objetivo</label>
+              <select id="objetivo" required>
+                <option value="">Selecione</option>
+                <option value="perder">Perder peso</option>
+                <option value="manter">Manter peso</option>
+                <option value="ganhar">Ganhar peso</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Nível de atividade</label>
+              <select id="atividadeMeta" required>
+                <option value="">Selecione</option>
+                <option value="1.2">Sedentário</option>
+                <option value="1.375">Levemente ativo</option>
+                <option value="1.55">Moderadamente ativo</option>
+                <option value="1.725">Muito ativo</option>
+                <option value="1.9">Extremamente ativo</option>
+              </select>
+            </div>
+            <button type="submit" class="calc-button">Calcular Meta</button>
+          </form>
+          <div id="metaResult" class="result-box">
+            <div class="result-value" id="metaValue"></div>
+            <div class="result-label">Calorias diárias recomendadas</div>
+            <div class="result-info" id="metaInfo"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
     <div class="container">
-        <div class="header">
-            <div>
-                <img src="../images/unnamed-removebg-preview.png" alt="Logo" class="logo-image">
-            </div>
-        </div>
-
-
-        <div class="profile-section">
-            <div class="profile-avatar">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                </svg>
-            </div>
-
-            <div class="profile-info">
-                <h2>Tung Tung Tung Sahur</h2>
-
-                <div class="profile-details">
-                    <div class="detail-item">
-                        <span>🎂</span>
-                        <span>24 anos</span>
-                    </div>
-                    <div class="detail-item">
-                        <span>🥗</span>
-                        <span>Nutricionista</span>
-                    </div>
-                    <div class="detail-item">
-                        <span>📍</span>
-                        <span>Jundiaí - SP</span>
-                    </div>
-                </div>
-
-
-                <div class="stats">
-                    <div class="stat-item">
-                        <span class="stat-number">1.2k</span>
-                        <span class="stat-label">Seguidores</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">340</span>
-                        <span class="stat-label">Seguindo</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">95</span>
-                        <span class="stat-label">Posts</span>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="action-buttons">
-                <button class="btn btn-follow" onclick="animateButton(this)">Seguir</button>
-                <button class="btn btn-message" onclick="animateButton(this)">Enviar mensagem</button>
-                <button class="btn btn-hire" onclick="animateButton(this)">Contratar</button>
-            </div>
-        </div>
-
-
-        <div class="gallery">
-            <h3>🖼️ Galeria</h3>
-            <div class="gallery-grid">
-                <div class="gallery-item" onclick="openImage(this)"></div>
-                <div class="gallery-item large" onclick="openImage(this)"></div>
-                <div class="gallery-item" onclick="openImage(this)"></div>
-                <div class="gallery-item" onclick="openImage(this)"></div>
-                <div class="gallery-item" onclick="openImage(this)"></div>
-            </div>
-        </div>
+      <p>© 2025 Grovy — Transformando vidas através da saúde e bem-estar</p>
     </div>
+  </footer>
 
+  <script>
+    // IMC Calculator
+    function calcularIMC(event) {
+      event.preventDefault();
+      const peso = parseFloat(document.getElementById('peso').value);
+      const altura = parseFloat(document.getElementById('altura').value);
+      const imc = peso / (altura * altura);
+      
+      let categoria = '';
+      if (imc < 18.5) categoria = 'Abaixo do peso';
+      else if (imc < 25) categoria = 'Peso normal';
+      else if (imc < 30) categoria = 'Sobrepeso';
+      else if (imc < 35) categoria = 'Obesidade grau I';
+      else if (imc < 40) categoria = 'Obesidade grau II';
+      else categoria = 'Obesidade grau III';
 
-    <script>
-        function animateButton(button) {
-            button.classList.add('clicked');
-            setTimeout(() => {
-                button.classList.remove('clicked');
-            }, 600);
-        }
+      document.getElementById('imcValue').textContent = imc.toFixed(1);
+      document.getElementById('imcInfo').textContent = `Categoria: ${categoria}. ${getIMCRecomendacao(categoria)}`;
+      document.getElementById('imcResult').classList.add('show');
+    }
 
+    function getIMCRecomendacao(categoria) {
+      const recomendacoes = {
+        'Abaixo do peso': 'Consulte um nutricionista para ganhar peso de forma saudável.',
+        'Peso normal': 'Continue mantendo seus hábitos saudáveis!',
+        'Sobrepeso': 'Considere aumentar a atividade física e melhorar a alimentação.',
+        'Obesidade grau I': 'Recomendamos acompanhamento profissional para perda de peso.',
+        'Obesidade grau II': 'Procure orientação médica e nutricional.',
+        'Obesidade grau III': 'Busque acompanhamento médico urgente.'
+      };
+      return recomendacoes[categoria] || '';
+    }
 
-        function openImage(item) {
-            item.style.transform = 'scale(1.1) rotate(5deg)';
-            setTimeout(() => {
-                item.style.transform = '';
-            }, 300);
-        }
+    // TMB Calculator
+    function calcularTMB(event) {
+      event.preventDefault();
+      const peso = parseFloat(document.getElementById('pesoTMB').value);
+      const altura = parseFloat(document.getElementById('alturaTMB').value);
+      const idade = parseFloat(document.getElementById('idade').value);
+      const sexo = document.getElementById('sexo').value;
 
+      let tmb;
+      if (sexo === 'masculino') {
+        tmb = 88.362 + (13.397 * peso) + (4.799 * altura) - (5.677 * idade);
+      } else {
+        tmb = 447.593 + (9.247 * peso) + (3.098 * altura) - (4.330 * idade);
+      }
 
-        // Add some interactive hover effects
-        document.addEventListener('DOMContentLoaded', function() {
-            const avatar = document.querySelector('.profile-avatar');
-            avatar.addEventListener('click', function() {
-                this.style.animation = 'none';
-                setTimeout(() => {
-                    this.style.animation = 'rotate 3s linear infinite';
-                }, 100);
-            });
-        });
-    </script>
+      document.getElementById('tmbValue').textContent = Math.round(tmb) + ' kcal';
+      document.getElementById('tmbInfo').textContent = 'Esta é a quantidade de calorias que seu corpo queima em repouso. Multiplique por seu fator de atividade para obter o gasto calórico total diário.';
+      document.getElementById('tmbResult').classList.add('show');
+    }
+
+    // Water Calculator
+    function calcularAgua(event) {
+      event.preventDefault();
+      const peso = parseFloat(document.getElementById('pesoAgua').value);
+      const atividade = document.getElementById('atividade').value;
+
+      const fatores = {
+        'sedentario': 35,
+        'leve': 40,
+        'moderado': 45,
+        'intenso': 50
+      };
+
+      const agua = (peso * fatores[atividade]) / 1000;
+
+      document.getElementById('aguaValue').textContent = agua.toFixed(1) + 'L';
+      document.getElementById('aguaInfo').textContent = `Beba aproximadamente ${Math.round(agua * 4)} copos de 250ml por dia. Distribua ao longo do dia e aumente em dias quentes ou durante exercícios.`;
+      document.getElementById('aguaResult').classList.add('show');
+    }
+
+    // Calorie Goal Calculator
+    function calcularMeta(event) {
+      event.preventDefault();
+      const tmb = parseFloat(document.getElementById('tmbMeta').value);
+      const objetivo = document.getElementById('objetivo').value;
+      const fatorAtividade = parseFloat(document.getElementById('atividadeMeta').value);
+
+      let tdee = tmb * fatorAtividade;
+      let meta;
+
+      if (objetivo === 'perder') {
+        meta = tdee - 500;
+      } else if (objetivo === 'ganhar') {
+        meta = tdee + 300;
+      } else {
+        meta = tdee;
+      }
+
+      const objetivoTexto = {
+        'perder': 'para perda de peso saudável (aproximadamente 0.5kg por semana)',
+        'manter': 'para manutenção do peso atual',
+        'ganhar': 'para ganho de massa muscular gradual'
+      };
+
+      document.getElementById('metaValue').textContent = Math.round(meta) + ' kcal';
+      document.getElementById('metaInfo').textContent = `Meta calórica diária ${objetivoTexto[objetivo]}. Combine com exercícios regulares e alimentação balanceada para melhores resultados.`;
+      document.getElementById('metaResult').classList.add('show');
+    }
+
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      if (window.scrollY > 100) {
+        header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+      } else {
+        header.style.boxShadow = 'none';
+      }
+    });
+  </script>
 </body>
 
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="{{ auth()->check() && auth()->user()->dark_mode ? 'dark' : '' }}">
 
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -20,14 +20,52 @@
             --text-light: #9CA3AF;
             --bg: #F9FAFB;
             --white: #FFFFFF;
+            --card-bg: #FFFFFF;
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --header-border: rgba(16, 185, 129, 0.1);
+            --card-border: rgba(16, 185, 129, 0.1);
+            --section-bg: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(6, 214, 160, 0.05) 100%);
+            --input-bg: #FFFFFF;
+            --input-border: rgba(16, 185, 129, 0.2);
+            --sidebar-bg: #FFFFFF;
+            --backdrop: rgba(0, 0, 0, 0.3);
             --red: #EF4444;
             --red-light: #FEE2E2;
             --shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
             --shadow-hover: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-            --shadow-light: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06);
+            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
             --border-radius: 16px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             --max-width: 1200px;
+        }
+
+        :root.dark {
+            --primary: #8B5CF6;
+            --primary-dark: #7C3AED;
+            --primary-light: #6D28D9;
+            --accent: #EC4899;
+            --secondary: #3B82F6;
+            --gradient: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+            --gradient-dark: linear-gradient(135deg, #7C3AED 0%, #DB2777 100%);
+            --text-dark: #F9FAFB;
+            --text-gray: #9CA3AF;
+            --text-light: #6B7280;
+            --bg: #0F172A;
+            --white: #1E293B;
+            --card-bg: #1E293B;
+            --header-bg: rgba(30, 41, 59, 0.95);
+            --header-border: rgba(139, 92, 246, 0.2);
+            --card-border: rgba(139, 92, 246, 0.2);
+            --section-bg: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+            --input-bg: #0F172A;
+            --input-border: rgba(139, 92, 246, 0.3);
+            --sidebar-bg: #1E293B;
+            --backdrop: rgba(0, 0, 0, 0.5);
+            --red: #EF4444;
+            --red-light: #7F1D1D;
+            --shadow: 0 20px 25px -5px rgb(139 92 246 / 0.15), 0 10px 10px -5px rgb(0 0 0 / 0.3);
+            --shadow-hover: 0 25px 50px -12px rgb(139 92 246 / 0.25);
+            --shadow-sm: 0 4px 6px rgba(139, 92, 246, 0.1);
         }
 
         * {
@@ -64,7 +102,7 @@
         }
 
         .logo {
-            color: var(--white);
+            color: white;
             font-size: 1.8rem;
             font-weight: bold;
             text-decoration: none;
@@ -80,7 +118,7 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: var(--white);
+            background: white;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -112,11 +150,11 @@
         }
 
         .create-post {
-            background: var(--white);
+            background: var(--card-bg);
             border-radius: var(--border-radius);
             padding: 2rem;
             box-shadow: var(--shadow);
-            border: 1px solid var(--primary-light);
+            border: 1px solid var(--card-border);
         }
 
         .create-post-header {
@@ -135,7 +173,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--white);
+            color: white;
             font-weight: bold;
             flex-shrink: 0;
         }
@@ -143,16 +181,18 @@
         .post-input {
             flex: 1;
             padding: 1rem 1.5rem;
-            border: 2px solid var(--primary-light);
+            border: 2px solid var(--input-border);
             border-radius: 50px;
             outline: none;
             font-size: 1rem;
             transition: var(--transition);
+            background: var(--input-bg);
+            color: var(--text-dark);
         }
 
         .post-input:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-light);
+            box-shadow: 0 0 0 3px var(--card-border);
         }
 
         .post-actions {
@@ -185,19 +225,19 @@
         }
 
         .post-option:hover {
-            background: var(--primary-light);
-            color: var(--primary-dark);
+            background: var(--card-border);
+            color: var(--primary);
         }
 
         .post-option.active {
-            background: var(--primary-light);
-            color: var(--primary-dark);
+            background: var(--card-border);
+            color: var(--primary);
             border-color: var(--primary);
         }
 
         .post-btn {
             background: var(--gradient);
-            color: var(--white);
+            color: white;
             border: none;
             padding: 0.8rem 2rem;
             border-radius: 50px;
@@ -222,12 +262,14 @@
 
         .additional-input {
             padding: 0.5rem 1rem;
-            border: 1px solid var(--primary-light);
+            border: 1px solid var(--input-border);
             border-radius: 8px;
             outline: none;
             font-size: 1rem;
             transition: var(--transition);
             display: none;
+            background: var(--input-bg);
+            color: var(--text-dark);
         }
 
         .additional-input:focus {
@@ -239,17 +281,17 @@
         }
 
         .feed-post {
-            background: var(--white);
+            background: var(--card-bg);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
             overflow: hidden;
             transition: var(--transition);
-            border: 1px solid transparent;
+            border: 1px solid var(--card-border);
             position: relative;
         }
 
         .feed-post:hover {
-            border-color: var(--primary-light);
+            border-color: var(--primary);
             transform: translateY(-2px);
         }
 
@@ -268,7 +310,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--white);
+            color: white;
             font-weight: bold;
             flex-shrink: 0;
         }
@@ -280,6 +322,7 @@
         .post-user-info h3 {
             font-size: 1.1rem;
             margin-bottom: 0.2rem;
+            color: var(--text-dark);
         }
 
         .post-meta {
@@ -289,7 +332,7 @@
 
         .achievement-badge {
             background: var(--gradient);
-            color: var(--white);
+            color: white;
             padding: 0.3rem 0.8rem;
             border-radius: 50px;
             font-size: 0.8rem;
@@ -304,6 +347,7 @@
         .post-text {
             margin-bottom: 1rem;
             line-height: 1.6;
+            color: var(--text-dark);
         }
 
         .post-image {
@@ -315,26 +359,9 @@
             cursor: pointer;
         }
 
-        .preview-btn {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-bottom: 1rem;
-            transition: var(--transition);
-        }
-
-        .preview-btn:hover {
-            background: var(--primary);
-            color: var(--white);
-        }
-
-        /* Estilos para Interações (Likes e Comentários) */
         .post-interactions {
             padding: 0 1.5rem 1.5rem;
-            border-top: 1px solid #f3f4f6;
+            border-top: 1px solid var(--card-border);
             margin-top: 1rem;
         }
 
@@ -360,17 +387,38 @@
         }
 
         .action-btn:hover {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-        }
-
-        .action-btn.liked {
-            color: var(--red);
+            background: var(--card-border);
+            color: var(--primary);
         }
 
         .action-btn.active {
             color: var(--primary);
-            background: var(--primary-light);
+            background: var(--card-border);
+        }
+
+        .like-btn {
+            outline: none;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font: inherit;
+            padding: 0.5rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-radius: 8px;
+            color: var(--text-gray);
+            transition: var(--transition);
+        }
+
+        .like-btn:hover {
+            background: var(--card-border);
+            color: var(--primary);
+        }
+
+        .like-btn:focus {
+            outline: none;
         }
 
         .likes-count {
@@ -389,28 +437,30 @@
             gap: 0.5rem;
             margin-top: 0.5rem;
             padding-top: 0.5rem;
-            border-top: 1px solid #f3f4f6;
+            border-top: 1px solid var(--card-border);
         }
 
         .comment-input {
             flex: 1;
             padding: 0.5rem 1rem;
-            border: 1px solid var(--primary-light);
+            border: 1px solid var(--input-border);
             border-radius: 50px;
             outline: none;
             font-size: 0.9rem;
             transition: var(--transition);
+            background: var(--input-bg);
+            color: var(--text-dark);
         }
 
         .comment-input:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 2px var(--primary-light);
+            box-shadow: 0 0 0 2px var(--card-border);
         }
 
         .comment-btn {
             padding: 0.5rem 1rem;
             background: var(--primary);
-            color: var(--white);
+            color: white;
             border: none;
             border-radius: 50px;
             font-size: 0.9rem;
@@ -431,6 +481,7 @@
             padding: 0.5rem 0;
             font-size: 0.9rem;
             line-height: 1.4;
+            color: var(--text-dark);
         }
 
         .comment-preview strong {
@@ -439,7 +490,7 @@
         }
 
         .comment-preview .comment-time {
-            color: var(--text-light);
+            color: var(--text-gray);
             font-size: 0.8rem;
             margin-left: 0.5rem;
         }
@@ -456,15 +507,14 @@
             color: var(--primary);
         }
 
-        /* Sidebar de Comentários */
         .comments-sidebar {
             position: fixed;
             top: 0;
             right: 0;
             width: 420px;
             height: 100vh;
-            background: var(--white);
-            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+            background: var(--sidebar-bg);
+            box-shadow: -4px 0 20px var(--shadow);
             transform: translateX(100%);
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1000;
@@ -482,7 +532,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
+            background: var(--backdrop);
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
@@ -496,12 +546,12 @@
 
         .sidebar-header {
             padding: 1.5rem 2rem;
-            border-bottom: 1px solid #f3f4f6;
+            border-bottom: 1px solid var(--card-border);
             display: flex;
             align-items: center;
             justify-content: space-between;
             background: var(--gradient);
-            color: var(--white);
+            color: white;
         }
 
         .sidebar-header h3 {
@@ -517,7 +567,7 @@
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            color: var(--white);
+            color: white;
             padding: 0.5rem;
             line-height: 1;
             border-radius: 8px;
@@ -562,7 +612,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--white);
+            color: white;
             font-size: 0.85rem;
             font-weight: bold;
             flex-shrink: 0;
@@ -585,6 +635,7 @@
             line-height: 1.5;
             margin-bottom: 0.5rem;
             word-wrap: break-word;
+            color: var(--text-dark);
         }
 
         .comment-meta {
@@ -592,7 +643,7 @@
             align-items: center;
             gap: 1rem;
             font-size: 0.85rem;
-            color: var(--text-light);
+            color: var(--text-gray);
         }
 
         .comment-delete {
@@ -607,13 +658,12 @@
 
         .comment-delete:hover {
             text-decoration: underline;
-            color: #dc2626;
         }
 
         .sidebar-comment-form {
             padding: 1.5rem 2rem;
-            border-top: 1px solid #f3f4f6;
-            background: #fafafa;
+            border-top: 1px solid var(--card-border);
+            background: var(--card-bg);
             display: flex;
             gap: 0.75rem;
             align-items: flex-end;
@@ -627,7 +677,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--white);
+            color: white;
             font-size: 0.85rem;
             font-weight: bold;
             flex-shrink: 0;
@@ -638,22 +688,6 @@
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
-        }
-
-        .sidebar .comment-input {
-            min-height: 40px;
-            max-height: 120px;
-            resize: vertical;
-            border-radius: 12px;
-            padding: 0.75rem 1rem;
-            font-family: inherit;
-        }
-
-        .sidebar .comment-btn {
-            align-self: flex-start;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-weight: 600;
         }
 
         .delete-form {
@@ -678,7 +712,7 @@
 
         .delete-btn:hover {
             background: var(--red);
-            color: var(--white);
+            color: white;
             transform: scale(1.05);
         }
 
@@ -689,10 +723,11 @@
         }
 
         .sidebar-card {
-            background: var(--white);
+            background: var(--card-bg);
             border-radius: var(--border-radius);
             padding: 1.5rem;
             box-shadow: var(--shadow);
+            border: 1px solid var(--card-border);
         }
 
         .sidebar-title {
@@ -704,10 +739,14 @@
 
         .motivational-quote {
             background: var(--gradient);
-            color: var(--white);
+            color: white;
             text-align: center;
             font-style: italic;
             line-height: 1.8;
+        }
+
+        .motivational-quote .sidebar-title {
+            color: white;
         }
 
         .floating-btn {
@@ -718,7 +757,7 @@
             height: 60px;
             border-radius: 50%;
             background: var(--gradient);
-            color: var(--white);
+            color: white;
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
@@ -731,7 +770,37 @@
             transform: scale(1.1) rotate(90deg);
         }
 
-        /* Responsivo - Mobile */
+        .empty-comments {
+            text-align: center;
+            color: var(--text-gray);
+            padding: 3rem 1rem;
+            font-style: italic;
+        }
+
+        .empty-comments-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .sidebar-comments::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-comments::-webkit-scrollbar-track {
+            background: var(--card-border);
+            border-radius: 3px;
+        }
+
+        .sidebar-comments::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .sidebar-comments::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
         @media (max-width: 1115px) {
             .main-container {
                 grid-template-columns: 1fr;
@@ -747,7 +816,6 @@
                 padding: 0 1rem;
             }
 
-            /* Mobile: Bottom Sheet */
             .comments-sidebar {
                 top: auto;
                 bottom: 0;
@@ -830,312 +898,6 @@
                 justify-content: center;
                 min-width: 0;
             }
-        }
-
-        /* Scrollbar personalizada */
-        .sidebar-comments::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .sidebar-comments::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 3px;
-        }
-
-        .sidebar-comments::-webkit-scrollbar-thumb {
-            background: var(--primary-light);
-            border-radius: 3px;
-        }
-
-        .sidebar-comments::-webkit-scrollbar-thumb:hover {
-            background: var(--primary);
-        }
-
-        .empty-comments {
-            text-align: center;
-            color: var(--text-light);
-            padding: 3rem 1rem;
-            font-style: italic;
-        }
-
-        .empty-comments-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            opacity: 0.3;
-        }
-
-        .hide-image-btn {
-            margin-top: 8px;
-            padding: 4px 8px;
-            font-size: 14px;
-            cursor: pointer;
-            background-color: #ef4444;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            transition: background-color 0.2s ease;
-        }
-
-        .hide-image-btn:hover {
-            background-color: #dc2626;
-        }
-
-        .like-btn {
-            outline: none;
-            border: none;
-            background: none;
-            cursor: pointer;
-            font: inherit;
-            padding: 0;
-            margin: 0;
-        }
-
-        .like-btn:focus {
-            outline: none;
-        }
-
-        .sidebar-card {
-            background: var(--white);
-            border-radius: var(--border-radius);
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-        }
-
-
-        .sidebar-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            color: var(--text-dark);
-        }
-
-
-        .motivational-quote {
-            background: var(--gradient);
-            color: var(--white);
-            text-align: center;
-            font-style: italic;
-            line-height: 1.8;
-        }
-
-
-        .leaderboard-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.8rem 0;
-            border-bottom: 1px solid var(--primary-light);
-        }
-
-
-        .leaderboard-item:last-child {
-            border-bottom: none;
-        }
-
-
-        .rank {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: var(--gradient);
-            color: var(--white);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-
-
-        .challenge-card {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
-            color: var(--white);
-            text-align: center;
-        }
-
-
-        .challenge-progress {
-            width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
-            margin: 1rem 0;
-            overflow: hidden;
-        }
-
-
-        .progress-bar {
-            height: 100%;
-            background: var(--white);
-            border-radius: 4px;
-            width: 65%;
-            animation: progressGrow 2s ease-out;
-        }
-
-
-        @keyframes progressGrow {
-            from {
-                width: 0%;
-            }
-
-
-            to {
-                width: 65%;
-            }
-        }
-
-
-        .floating-btn {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--gradient);
-            color: var(--white);
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            box-shadow: var(--shadow-hover);
-            transition: var(--transition);
-            z-index: 50;
-        }
-
-
-        .floating-btn:hover {
-            transform: scale(1.1) rotate(90deg);
-        }
-
-
-        @media (max-width: 768px) {
-            .main-container {
-                grid-template-columns: 1fr;
-                padding: 0 1rem;
-                gap: 1rem;
-            }
-
-
-            .header-content {
-                padding: 0 1rem;
-            }
-
-
-            .create-post,
-            .feed-post,
-            .sidebar-card {
-                padding: 1rem;
-            }
-        }
-
-
-
-
-        @media (max-width: 650px) {
-            .main-container {
-                grid-template-columns: 1fr;
-                padding: 0 1rem;
-                gap: 1rem;
-            }
-
-
-            .header-content {
-                padding: 0 1rem;
-            }
-
-
-            .create-post,
-            .feed-post,
-            .sidebar-card,
-            .post-actions {
-                width: auto;
-                max-width: 100%;
-                height: auto;
-            }
-
-
-            .post-actions {
-                width: auto;
-                max-width: 70%;
-            }
-
-
-        }
-
-
-        @media (max-width: 1115px) {
-            .main-container {
-                grid-template-columns: 1fr;
-                padding: 0 1rem;
-                gap: 1rem;
-            }
-
-
-            .header-content {
-                padding: 0 1rem;
-            }
-
-
-            .create-post,
-            .feed-post,
-            .sidebar-card {
-                padding: 1rem;
-            }
-
-
-            .header {
-                padding: 1rem 0;
-            }
-        }
-
-
-        .nutrition-tip {
-            background: linear-gradient(135deg, var(--primary-light) 0%, rgba(6, 214, 160, 0.1) 100%);
-            border-left: 4px solid var(--primary);
-            margin: 1rem 0;
-            padding: 1rem;
-            border-radius: 0 var(--border-radius) var(--border-radius) 0;
-        }
-
-
-        .tip-icon {
-            color: var(--primary);
-            margin-right: 0.5rem;
-        }
-
-
-        .post-actions {
-            display: flex;
-            flex-wrap: wrap;
-            /* permite que quebre linha se necessário */
-            gap: 0.5rem;
-            /* espaço entre os botões */
-            width: 100%;
-            /* ou auto, conforme preferir */
-            max-width: 90%;
-            /* igual ao container pai para não ultrapassar */
-            justify-content: space-between;
-            /* para distribuir o espaço */
-            box-sizing: border-box;
-            /* para incluir padding na largura */
-        }
-
-
-        .post-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            flex-grow: 1;
-        }
-
-
-        .post-option,
-        .post-btn {
-            flex: 1 1 auto;
-            /* cresce e encolhe conforme o espaço */
-            min-width: 100px;
-            /* evita que fiquem muito pequenos */
-            box-sizing: border-box;
         }
     </style>
 </head>

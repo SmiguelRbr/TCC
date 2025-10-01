@@ -25,28 +25,40 @@
       --text-gray: #6B7280;
       --bg: #F9FAFB;
       --white: #FFFFFF;
+      --card-bg: #FFFFFF;
+      --header-bg: rgba(255, 255, 255, 0.95);
+      --header-border: rgba(16, 185, 129, 0.1);
+      --card-border: rgba(16, 185, 129, 0.1);
+      --section-bg: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(6, 214, 160, 0.05) 100%);
       --shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
       --shadow-hover: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+      --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
       --border-radius: 16px;
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       --max-width: 1200px;
     }
 
     :root.dark {
-    --primary: #059669;
-    --primary-dark: #047857;
-    --primary-light: #064e3b;
-    --accent: #06b6d4;
-    --secondary: #0e7490;
-    --gradient: linear-gradient(135deg, #059669 0%, #06b6d4 100%);
-    --gradient-dark: linear-gradient(135deg, #047857 0%, #0e7490 100%);
-    --text-dark: #f3f4f6;
-    --text-gray: #d1d5db;
-    --bg: #111827;
-    --white: #1f2937;
-    --shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 10px 10px -5px rgb(0 0 0 / 0.2);
-    --shadow-hover: 0 25px 50px -12px rgb(0 0 0 / 0.5);
-}
+      --primary: #8B5CF6;
+      --primary-dark: #7C3AED;
+      --primary-light: #6D28D9;
+      --accent: #EC4899;
+      --secondary: #3B82F6;
+      --gradient: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+      --gradient-dark: linear-gradient(135deg, #7C3AED 0%, #DB2777 100%);
+      --text-dark: #F9FAFB;
+      --text-gray: #9CA3AF;
+      --bg: #0F172A;
+      --white: #1E293B;
+      --card-bg: #1E293B;
+      --header-bg: rgba(30, 41, 59, 0.95);
+      --header-border: rgba(139, 92, 246, 0.2);
+      --card-border: rgba(139, 92, 246, 0.2);
+      --section-bg: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+      --shadow: 0 20px 25px -5px rgb(139 92 246 / 0.15), 0 10px 10px -5px rgb(0 0 0 / 0.3);
+      --shadow-hover: 0 25px 50px -12px rgb(139 92 246 / 0.25);
+      --shadow-sm: 0 4px 6px rgba(139, 92, 246, 0.1);
+    }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -67,10 +79,9 @@
 
     /* Header com glassmorphism */
     header {
-      background: rgba(255, 255, 255, 0.95);
+      background: var(--header-bg);
       backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(16, 185, 129, 0.1);
-    
+      border-bottom: 1px solid var(--header-border);
       position: sticky;
       top: 0;
       z-index: 100;
@@ -149,7 +160,7 @@
 
     nav a:not(.btn):hover {
       color: var(--primary);
-      background: rgba(16, 185, 129, 0.1);
+      background: var(--card-border);
       transform: translateY(-2px);
     }
 
@@ -157,12 +168,12 @@
       background: var(--gradient);
       color: white;
       font-weight: 600;
-      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+      box-shadow: var(--shadow-sm);
     }
 
     nav .btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6);
+      box-shadow: var(--shadow);
     }
 
     /* Hero section com animações */
@@ -220,12 +231,12 @@
     .btn {
       background: var(--gradient);
       color: white;
-      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+      box-shadow: var(--shadow);
     }
 
     .btn:hover {
       transform: translateY(-3px);
-      box-shadow: 0 12px 35px rgba(16, 185, 129, 0.6);
+      box-shadow: var(--shadow-hover);
     }
 
     .btn-outline {
@@ -238,7 +249,7 @@
       background: var(--primary);
       color: white;
       transform: translateY(-3px);
-      box-shadow: 0 12px 35px rgba(16, 185, 129, 0.4);
+      box-shadow: var(--shadow);
     }
 
     /* Hero visual */
@@ -252,13 +263,13 @@
     }
 
     .hero-card {
-      background: linear-gradient(145deg, white 0%, rgba(255, 255, 255, 0.9) 100%);
+      background: var(--card-bg);
       backdrop-filter: blur(20px);
       padding: 40px;
       border-radius: 24px;
       box-shadow: var(--shadow);
       text-align: center;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid var(--card-border);
       position: relative;
       overflow: hidden;
       transform: rotate(3deg);
@@ -334,7 +345,7 @@
     /* Cards section */
     .cards-section {
       padding: 80px 0;
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(6, 214, 160, 0.05) 100%);
+      background: var(--section-bg);
     }
 
     .cards {
@@ -344,14 +355,14 @@
     }
 
     .card {
-      background: white;
+      background: var(--card-bg);
       padding: 32px;
       border-radius: var(--border-radius);
       text-decoration: none;
       color: var(--text-dark);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      box-shadow: var(--shadow-sm);
       transition: var(--transition);
-      border: 1px solid rgba(16, 185, 129, 0.1);
+      border: 1px solid var(--card-border);
       position: relative;
       overflow: hidden;
       opacity: 0;
@@ -438,12 +449,12 @@
     }
 
     .tip {
-      background: white;
+      background: var(--card-bg);
       padding: 32px;
       border-radius: var(--border-radius);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      box-shadow: var(--shadow-sm);
       transition: var(--transition);
-      border: 1px solid rgba(16, 185, 129, 0.1);
+      border: 1px solid var(--card-border);
       opacity: 0;
       transform: translateY(30px);
     }
@@ -473,11 +484,12 @@
 
     /* Footer */
     footer {
-      background: var(--text-dark);
-      color: white;
+      background: var(--card-bg);
+      color: var(--text-dark);
       text-align: center;
       padding: 40px 0;
       margin-top: 80px;
+      border-top: 1px solid var(--card-border);
     }
 
     footer p {
@@ -591,9 +603,8 @@
   </style>
 </head>
 
-
+<body>
   <header>
-
     <div class="container header-content">
       <div class="logo">
         <div class="logo-icon">
@@ -611,7 +622,6 @@
         @guest
         <a href="{{ route('login') }}" class="btn">Entrar</a>
         @endguest
-
       </nav>
     </div>
   </header>
@@ -633,7 +643,6 @@
             ✨ Começar agora
           </a>
           @endguest
-
         </div>
       </div>
 
@@ -759,10 +768,8 @@
     window.addEventListener('scroll', () => {
       const header = document.querySelector('header');
       if (window.scrollY > 100) {
-        header.style.background = 'rgba(255, 255, 255, 0.98)';
         header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
       } else {
-        header.style.background = 'rgba(255, 255, 255, 0.95)';
         header.style.boxShadow = 'none';
       }
     });

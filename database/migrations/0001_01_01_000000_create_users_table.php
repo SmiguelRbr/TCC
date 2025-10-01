@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('altura')->nullable();
             $table->integer('idade')->nullable();
             $table->enum('validacao', ['pendente', 'validado', 'recusado'])->default('pendente');
+            $table->integer('avaliacao')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

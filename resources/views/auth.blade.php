@@ -432,6 +432,12 @@
                         <span>Entrando...</span>
                     </div>
                 </button>
+
+                @if ($errors->any())
+                <div class="error-message" style="color: #EF4444; font-size: 0.875rem; margin-top: 0.5rem; text-align: center;">
+                    {{ $errors->first() }}
+                </div>
+                @endif
             </form>
 
 
@@ -471,6 +477,12 @@
                         <span>Criando...</span>
                     </div>
                 </button>
+
+                @if ($errors->any())
+                <div class="error-message" style="color: #EF4444; font-size: 0.875rem; margin-top: 0.5rem; text-align: center;">
+                    {{ $errors->first() }}
+                </div>
+                @endif
             </form>
 
 
@@ -529,7 +541,7 @@
             }
         });
 
-       
+
         // Efeito de foco suave nos inputs
         document.querySelectorAll('.form-input').forEach(input => {
             input.addEventListener('focus', function() {

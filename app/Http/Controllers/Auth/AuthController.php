@@ -41,7 +41,7 @@ class AuthController extends Controller
         Auth::login($user);
 
 
-        return redirect()->route('sobrevoce.crn');
+        return redirect()->route('sobrevoce.form');
     }
 
     public function login(Request $request)
@@ -76,7 +76,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('AuthView');
+        return redirect()->route('/');
     }
 
 
@@ -99,6 +99,7 @@ class AuthController extends Controller
             'peso'   => $validated['peso']   ?? $user->peso,
             'altura' => $validated['altura'] ?? $user->altura,
             'idade'  => $validated['idade']  ?? $user->idade,
+            'role' => $request->role,
         ]);
 
         return redirect()->route('posts.index');

@@ -36,7 +36,7 @@ class ValidarController extends Controller
 
         $registro = CrefRegistros::create($validator->validated());
 
-        return response()->json(['success' => true, 'data' => $registro]);
+        return redirect()->route('sobrevoce.crn')->with('success', 'CREF salvo com sucesso!');
     }
 
     public function salvarCrn(Request $request)
@@ -61,7 +61,7 @@ class ValidarController extends Controller
 
         $crnRegistro = CrnRegistro::create($validator->validated());
 
-        return response()->json(['success' => true, 'data' => $crnRegistro]);
+        return redirect()->route('profile.show');
     }
 
 

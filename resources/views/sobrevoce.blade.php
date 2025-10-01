@@ -525,13 +525,11 @@
                 <div class="choice-button" onclick="selectProfile('client')">
                     <span class="choice-button-icon">🌟</span>
                     <div class="choice-button-title">Quero Mudar de Vida</div>
-                    <div class="choice-button-desc">Busco orientação para ter uma vida mais saudável e equilibrada</div>
                 </div>
 
                 <div class="choice-button" onclick="selectProfile('professional')">
                     <span class="choice-button-icon">👨‍⚕️</span>
                     <div class="choice-button-title">Sou um Profissional</div>
-                    <div class="choice-button-desc">Trabalho na área da saúde e quero oferecer meus serviços</div>
                 </div>
             </div>
         </div>
@@ -542,17 +540,17 @@
             <h1 class="screen-title">Seus Dados Pessoais</h1>
             <p class="screen-subtitle">Precisamos de algumas informações para criar um plano personalizado para você</p>
 
-            <form method="POST" action="{{ route('user.definirCarac', ['user' => Auth::user()->id]) }}" class="form-section">
+            <form id="clientForm" method="POST" action="{{ route('user.definirCarac', ['user' => Auth::user()->id]) }}" class="form-section">
                 @csrf
+                <input type="hidden" name="role" value="Usuario">
+
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label" for="altura">Altura</label>
                         <div class="input-unit" data-unit="cm">
                             <input type="number" class="form-input" id="altura" name="altura" placeholder="175" min="100" max="250" value="{{ old('altura', Auth::user()->altura) }}" required>
                         </div>
-                        @error('altura')
-                        <span class="text-red-500">{{ $message }}</span>
-                        @enderror
+                        @error('altura')<span class="text-red-500">{{ $message }}</span>@enderror
                     </div>
 
                     <div class="form-group">
@@ -560,9 +558,7 @@
                         <div class="input-unit" data-unit="kg">
                             <input type="number" class="form-input" id="peso" name="peso" placeholder="70.5" min="30" max="300" step="0.1" value="{{ old('peso', Auth::user()->peso) }}" required>
                         </div>
-                        @error('peso')
-                        <span class="text-red-500">{{ $message }}</span>
-                        @enderror
+                        @error('peso')<span class="text-red-500">{{ $message }}</span>@enderror
                     </div>
                 </div>
 
@@ -571,9 +567,7 @@
                     <div class="input-unit" data-unit="anos">
                         <input type="number" class="form-input" id="idade" name="idade" placeholder="25" min="12" max="120" value="{{ old('idade', Auth::user()->idade) }}" required>
                     </div>
-                    @error('idade')
-                    <span class="text-red-500">{{ $message }}</span>
-                    @enderror
+                    @error('idade')<span class="text-red-500">{{ $message }}</span>@enderror
                 </div>
 
                 <div class="action-buttons">
@@ -590,13 +584,13 @@
             <p class="screen-subtitle">Selecione sua área de atuação profissional</p>
 
             <div class="professional-choices">
-                <div class="professional-card" onclick="selectProfessional('nutricionista')">
+                <div class="professional-card" onclick="selectProfessional('Nutricionista', event)">
                     <span class="professional-icon">🥗</span>
                     <div class="professional-title">Nutricionista</div>
                     <div class="professional-desc">Especialista em alimentação e nutrição</div>
                 </div>
 
-                <div class="professional-card" onclick="selectProfessional('personal')">
+                <div class="professional-card" onclick="selectProfessional('Personal', event)">
                     <span class="professional-icon">💪</span>
                     <div class="professional-title">Personal Trainer</div>
                     <div class="professional-desc">Profissional de educação física</div>
@@ -615,17 +609,16 @@
             <h1 class="screen-title" id="screen3Title">Dados Profissionais</h1>
             <p class="screen-subtitle" id="screen3Subtitle">Complete seu registro profissional</p>
 
-            <!-- Formulário Nutricionista (CRN) -->
-            <form method="POST" action="{{ route('sobrevoce.crn') }}" class="form-section">
+            <!-- Formulário Nutricionista -->
+            <form id="nutricionistaForm" method="POST" action="{{ route('sobrevoce.crn') }}" class="form-section hidden">
                 @csrf
                 <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                <input type="hidden" name="role" value="Nutricionista">
 
                 <div class="form-group">
                     <label class="form-label" for="crn_numero">Número do CRN</label>
-                    <input type="text" class="form-input" id="crn_numero" name="numero" value="{{ old('numero') }}" maxlength="10" required>
-                    @error('numero')
-                    <span class="text-red-500">{{ $message }}</span>
-                    @enderror
+                    <input type="text" class="form-input" id="crn_numero" name="numero" maxlength="10" value="{{ old('numero') }}" required>
+                    @error('numero')<span class="text-red-500">{{ $message }}</span>@enderror
                 </div>
 
                 <div class="form-group">
@@ -635,11 +628,8 @@
                         <option value="CRN-1" {{ old('regiao') == 'CRN-1' ? 'selected' : '' }}>CRN-1 - RJ, ES</option>
                         <option value="CRN-2" {{ old('regiao') == 'CRN-2' ? 'selected' : '' }}>CRN-2 - RS</option>
                         <option value="CRN-3" {{ old('regiao') == 'CRN-3' ? 'selected' : '' }}>CRN-3 - SP, MS</option>
-                        <!-- restante das opções -->
                     </select>
-                    @error('regiao')
-                    <span class="text-red-500">{{ $message }}</span>
-                    @enderror
+                    @error('regiao')<span class="text-red-500">{{ $message }}</span>@enderror
                 </div>
 
                 <div class="action-buttons">
@@ -648,18 +638,17 @@
                 </div>
             </form>
 
-            <!-- Formulário Personal Trainer (CREF) -->
-            <form method="POST" action="{{ route('user.definirCarac', ['user' => Auth::id()]) }}" class="form-section">
-    @csrf
+            <!-- Formulário Personal Trainer -->
+            <form id="personalForm" method="POST" action="{{ route('user.definirCarac', ['user' => Auth::id()]) }}" class="form-section hidden">
+                @csrf
                 <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                <input type="hidden" name="role" value="Personal">
 
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label" for="cref_numero">Número do CREF</label>
-                        <input type="text" class="form-input" id="cref_numero" name="cref_numero" value="{{ old('cref_numero') }}" maxlength="6" required>
-                        @error('cref_numero')
-                        <span class="text-red-500">{{ $message }}</span>
-                        @enderror
+                        <input type="text" class="form-input" id="cref_numero" name="cref_numero" maxlength="6" value="{{ old('cref_numero') }}" required>
+                        @error('cref_numero')<span class="text-red-500">{{ $message }}</span>@enderror
                     </div>
 
                     <div class="form-group">
@@ -672,9 +661,7 @@
                             <option value="M" {{ old('cref_categoria') == 'M' ? 'selected' : '' }}>M - Mestrado</option>
                             <option value="D" {{ old('cref_categoria') == 'D' ? 'selected' : '' }}>D - Doutorado</option>
                         </select>
-                        @error('cref_categoria')
-                        <span class="text-red-500">{{ $message }}</span>
-                        @enderror
+                        @error('cref_categoria')<span class="text-red-500">{{ $message }}</span>@enderror
                     </div>
                 </div>
 
@@ -685,11 +672,8 @@
                         <option value="SP" {{ old('cref_uf') == 'SP' ? 'selected' : '' }}>São Paulo</option>
                         <option value="RJ" {{ old('cref_uf') == 'RJ' ? 'selected' : '' }}>Rio de Janeiro</option>
                         <option value="MG" {{ old('cref_uf') == 'MG' ? 'selected' : '' }}>Minas Gerais</option>
-                        <!-- restante das opções -->
                     </select>
-                    @error('cref_uf')
-                    <span class="text-red-500">{{ $message }}</span>
-                    @enderror
+                    @error('cref_uf')<span class="text-red-500">{{ $message }}</span>@enderror
                 </div>
 
                 <div class="action-buttons">
@@ -702,162 +686,56 @@
 
     <script>
         let currentScreen = 1;
-        let userType = null;
         let professionalType = null;
 
         function updateProgress() {
             const progress = document.getElementById('progress');
-            const percentage = (currentScreen / 3) * 100;
-            progress.style.width = percentage + '%';
+            if (currentScreen === 1) progress.style.width = '33%';
+            else if (currentScreen === '2a' || currentScreen === '2b') progress.style.width = '66%';
+            else progress.style.width = '100%';
         }
 
         function showScreen(screenNumber) {
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.remove('active');
-            });
-
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(`screen${screenNumber}`).classList.add('active');
             currentScreen = screenNumber;
             updateProgress();
         }
 
         function selectProfile(type) {
-            userType = type;
-
-            if (type === 'client') {
-                showScreen('2a');
-            } else {
-                showScreen('2b');
-            }
+            if (type === 'client') showScreen('2a');
+            else showScreen('2b');
         }
 
-        function selectProfessional(type) {
+        function selectProfessional(type, event) {
             professionalType = type;
-
-            // Remove seleção anterior
-            document.querySelectorAll('.professional-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-
-            // Adiciona seleção atual
-            event.currentTarget.classList.add('selected');
-
-            // Habilita botão continuar
             document.getElementById('continueBtn').disabled = false;
+            document.querySelectorAll('.professional-card').forEach(card => card.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
         }
 
         function showProfessionalForm() {
-            const title = document.getElementById('screen3Title');
-            const subtitle = document.getElementById('screen3Subtitle');
-            const nutricionistaForm = document.getElementById('nutricionistaForm');
-            const personalForm = document.getElementById('personalForm');
-
             if (professionalType === 'nutricionista') {
-                title.textContent = 'Registro CRN';
-                subtitle.textContent = 'Complete seu registro no Conselho Regional de Nutricionistas';
-                nutricionistaForm.classList.remove('hidden');
-                personalForm.classList.add('hidden');
+                document.getElementById('nutricionistaForm').classList.remove('hidden');
+                document.getElementById('personalForm').classList.add('hidden');
             } else {
-                title.textContent = 'Registro CREF';
-                subtitle.textContent = 'Complete seu registro no Conselho Regional de Educação Física';
-                nutricionistaForm.classList.add('hidden');
-                personalForm.classList.remove('hidden');
+                document.getElementById('personalForm').classList.remove('hidden');
+                document.getElementById('nutricionistaForm').classList.add('hidden');
             }
-
             showScreen(3);
         }
 
         function goBack() {
-            if (currentScreen === '2a' || currentScreen === '2b') {
-                showScreen(1);
-                userType = null;
-                professionalType = null;
-            } else if (currentScreen === 3) {
-                showScreen('2b');
-            }
+            if (currentScreen === '2a' || currentScreen === '2b') showScreen(1);
+            else if (currentScreen === 3) showScreen('2b');
         }
 
-        // Manipulação dos formulários
-        document.getElementById('clientForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const button = this.querySelector('.btn-primary');
-            const buttonText = button.querySelector('.button-text');
-            const loading = button.querySelector('.loading');
-
-            buttonText.style.display = 'none';
-            loading.style.display = 'flex';
-            button.disabled = true;
-
-            const formData = {
-                altura: document.getElementById('altura').value,
-                peso: document.getElementById('peso').value,
-                idade: document.getElementById('idade').value
-            };
-
-            setTimeout(() => {
-                console.log('Dados do cliente:', formData);
-                alert('Cadastro realizado com sucesso!');
-                buttonText.style.display = 'block';
-                loading.style.display = 'none';
-                button.disabled = false;
-            }, 2000);
-        });
-
-        document.getElementById('nutricionistaForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const button = this.querySelector('.btn-primary');
-            const buttonText = button.querySelector('.button-text');
-            const loading = button.querySelector('.loading');
-
-            buttonText.style.display = 'none';
-            loading.style.display = 'flex';
-            button.disabled = true;
-
-            const formData = {
-                numero: document.getElementById('crn_numero').value,
-                regiao: document.getElementById('crn_regiao').value
-            };
-
-            setTimeout(() => {
-                console.log('Dados CRN:', formData);
-                alert('Cadastro profissional finalizado!');
-                buttonText.style.display = 'block';
-                loading.style.display = 'none';
-                button.disabled = false;
-            }, 2000);
-        });
-
-        document.getElementById('personalForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const button = this.querySelector('.btn-primary');
-            const buttonText = button.querySelector('.button-text');
-            const loading = button.querySelector('.loading');
-
-            buttonText.style.display = 'none';
-            loading.style.display = 'flex';
-            button.disabled = true;
-
-            const formData = {
-                cref_numero: document.getElementById('cref_numero').value,
-                cref_categoria: document.getElementById('cref_categoria').value,
-                cref_uf: document.getElementById('cref_uf').value
-            };
-
-            setTimeout(() => {
-                console.log('Dados CREF:', formData);
-                alert('Cadastro profissional finalizado!');
-                buttonText.style.display = 'block';
-                loading.style.display = 'none';
-                button.disabled = false;
-            }, 2000);
-        });
-
-        // Inicializar
         updateProgress();
     </script>
 </body>
+
+
+
+
 
 </html>
