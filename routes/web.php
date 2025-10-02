@@ -1,15 +1,15 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ValidarController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ValidationController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CalculatorController;
 
-
+// --- Rotas Públicas (Visitantes) ---
 Route::get('/', function () {
     return view('home');
 });
@@ -18,83 +18,75 @@ Route::get('/login', function () {
     return view('auth');
 })->name('login');
 
-
-Route::get('/crn/formulario', function () {
-    return view('crn');
-})->name('crn.formulario');
-
-// Validação do CRN (via POST do form)
-Route::post('/crn/validar', [ValidarController::class, 'validarCrn'])->name('crn.validar');
-
-// Salvamento do CRN (opcional, se for usar salvarCrn em outro formulário)
-Route::post('/crn/salvar', [ValidarController::class, 'salvarCrn'])->name('crn.salvar');
-
-
 Route::post('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'login']); // O name 'login' já estava na rota GET
 
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
-
+// --- Rotas de Autenticação e Onboarding (requerem login) ---
 Route::middleware('auth')->group(function () {
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // Formulário de Onboarding (Cliente ou Profissional)
+    Route::get('/sobrevoce', function () {
+        return view('sobrevoce');
+    })->name('sobrevoce.form');
+
+    // Rota para salvar dados do CLIENTE (peso, altura, etc.)
     Route::post('/user/{user}/definir-carac', [AuthController::class, 'definirCarac'])
         ->name('user.definirCarac');
+
+    // Rota para salvar dados do NUTRICIONISTA (CRN)
+    Route::post('/sobrevoce/crn', [ValidarController::class, 'salvarCrn'])
+        ->name('sobrevoce.crn.salvar');
+
+    // Rota para salvar dados do PERSONAL TRAINER (CREF)
+    Route::post('/sobrevoce/cref', [ValidarController::class, 'salvarCref'])
+        ->name('sobrevoce.cref.salvar');
 });
 
-Route::get('/sobrevoce', function () {
-    return view('sobrevoce');
-})->name('sobrevoce.form');
-
-// POST para salvar o CRN
-Route::post('/sobrevoce', [ValidarController::class, 'salvarCrn'])->name('sobrevoce.crn');
-
-
-Route::middleware(['auth'])->group(function () {
+// --- Rotas do Feed e Interações (requerem login) ---
+Route::middleware('auth')->group(function () {
     Route::get('/feed', [PostController::class, 'index'])->name('posts.index');
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+
+    Route::post('/posts/{post}/like', [LikeController::class, 'toggle'])->name('posts.like');
+    Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
-
-Route::post('/posts/{post}/like-ajax', [PostController::class, 'likeAjax'])->name('posts.like.ajax');
-
-Route::post('/posts/{post}/like', [LikeController::class, 'toggle'])->name('posts.like');
-Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
-Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
-
-
-Route::middleware(['auth'])->group(function () {
-    // Exibir perfil
+// --- Rotas de Perfil (requerem login) ---
+Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
-
-    // Exibir formulário de edição do perfil
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-
-    // Atualizar perfil
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-
-
-
-    // Alternar modo escuro
-    Route::post('/profile/dark-mode', [ProfileController::class, 'toggleDarkMode'])->name('profile.toggle-dark-mode');
+    Route::put('/perfil/update-info', [ProfileController::class, 'updateInfo'])->name('profile.updateInfo');
+    Route::post('/perfil/toggle-dark-mode', [ProfileController::class, 'toggleDarkMode'])->name('profile.toggleDarkMode');
 });
 
+// --- Rotas das Calculadoras (requerem login) ---
+Route::middleware('auth')->group(function () {
+    Route::get('/calculadoras/imc', [CalculatorController::class, 'imc'])->name('calculators.imc');
+    // ... e as outras rotas de calculadora
+});
+
+// --- Outras Rotas ---
 Route::post('/toggle-theme', function () {
-    $current = session('theme', 'light');
-    $new = $current === 'light' ? 'dark' : 'light';
-    session(['theme' => $new]);
+    session(['theme' => session('theme', 'light') === 'light' ? 'dark' : 'light']);
     return back();
 })->name('toggle.theme');
 
+// routes/web.php
 
-use App\Http\Controllers\CalculatorController;
+Route::middleware('auth')->group(function () {
+    // ... suas outras rotas ...
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/calculadoras/imc', [CalculatorController::class, 'imc'])->name('calculators.imc');
-    Route::get('/calculadoras/calorias', [CalculatorController::class, 'calorias'])->name('calculators.calorias');
-    Route::get('/calculadoras/agua', [CalculatorController::class, 'agua'])->name('calculators.agua');
-    Route::get('/calculadoras/composicao', [CalculatorController::class, 'composicao'])->name('calculators.composicao');
-    Route::get('/calculadoras/macros', [CalculatorController::class, 'macros'])->name('calculators.macros');
-    Route::get('/calculadoras/vo2max', [CalculatorController::class, 'vo2max'])->name('calculators.vo2max');
-    Route::get('/calculadoras/bf-avancado', [CalculatorController::class, 'bfAvancado'])->name('calculators.bf-avancado');
-    Route::get('/calculadoras/periodizacao', [CalculatorController::class, 'periodizacao'])->name('calculators.periodizacao');
+    // Rota para a página de validação pendente
+    Route::get('/aguardando-validacao', function () {
+        return view('validacao_pendente');
+    })->name('validacao.pendente');
 });
+
+// routes/web.php
+
+// A rota que seu JavaScript já está chamando
+Route::post('/posts/{post}/like-ajax', [PostController::class, 'likeAjax'])->name('posts.like.ajax');

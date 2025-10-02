@@ -515,18 +515,15 @@
             <div class="progress-fill" id="progress"></div>
         </div>
 
-        <!-- Tela 1: Escolha do Perfil -->
         <div class="screen active" id="screen1">
             <div class="screen-icon">🎯</div>
             <h1 class="screen-title">Qual é seu objetivo?</h1>
             <p class="screen-subtitle">Escolha a opção que melhor descreve você para personalizarmos sua experiência</p>
-
             <div class="choice-buttons">
                 <div class="choice-button" onclick="selectProfile('client')">
                     <span class="choice-button-icon">🌟</span>
                     <div class="choice-button-title">Quero Mudar de Vida</div>
                 </div>
-
                 <div class="choice-button" onclick="selectProfile('professional')">
                     <span class="choice-button-icon">👨‍⚕️</span>
                     <div class="choice-button-title">Sou um Profissional</div>
@@ -534,16 +531,13 @@
             </div>
         </div>
 
-        <!-- Tela 2a: Dados Pessoais (Cliente) -->
         <div class="screen" id="screen2a">
             <div class="screen-icon">📊</div>
             <h1 class="screen-title">Seus Dados Pessoais</h1>
             <p class="screen-subtitle">Precisamos de algumas informações para criar um plano personalizado para você</p>
-
             <form id="clientForm" method="POST" action="{{ route('user.definirCarac', ['user' => Auth::user()->id]) }}" class="form-section">
                 @csrf
                 <input type="hidden" name="role" value="Usuario">
-
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label" for="altura">Altura</label>
@@ -552,7 +546,6 @@
                         </div>
                         @error('altura')<span class="text-red-500">{{ $message }}</span>@enderror
                     </div>
-
                     <div class="form-group">
                         <label class="form-label" for="peso">Peso</label>
                         <div class="input-unit" data-unit="kg">
@@ -561,7 +554,6 @@
                         @error('peso')<span class="text-red-500">{{ $message }}</span>@enderror
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label class="form-label" for="idade">Idade</label>
                     <div class="input-unit" data-unit="anos">
@@ -569,7 +561,6 @@
                     </div>
                     @error('idade')<span class="text-red-500">{{ $message }}</span>@enderror
                 </div>
-
                 <div class="action-buttons">
                     <button type="button" class="btn btn-secondary" onclick="goBack()">Voltar</button>
                     <button type="submit" class="btn btn-primary">Continuar</button>
@@ -577,50 +568,41 @@
             </form>
         </div>
 
-        <!-- Tela 2b: Tipo de Profissional -->
         <div class="screen" id="screen2b">
             <div class="screen-icon">🩺</div>
             <h1 class="screen-title">Sua Especialidade</h1>
             <p class="screen-subtitle">Selecione sua área de atuação profissional</p>
-
             <div class="professional-choices">
                 <div class="professional-card" onclick="selectProfessional('Nutricionista', event)">
                     <span class="professional-icon">🥗</span>
                     <div class="professional-title">Nutricionista</div>
                     <div class="professional-desc">Especialista em alimentação e nutrição</div>
                 </div>
-
                 <div class="professional-card" onclick="selectProfessional('Personal', event)">
                     <span class="professional-icon">💪</span>
                     <div class="professional-title">Personal Trainer</div>
                     <div class="professional-desc">Profissional de educação física</div>
                 </div>
             </div>
-
             <div class="action-buttons">
                 <button type="button" class="btn btn-secondary" onclick="goBack()">Voltar</button>
                 <button type="button" class="btn btn-primary" id="continueBtn" onclick="showProfessionalForm()" disabled>Continuar</button>
             </div>
         </div>
 
-        <!-- Tela 3: Dados do Profissional -->
         <div class="screen" id="screen3">
             <div class="screen-icon">📋</div>
             <h1 class="screen-title" id="screen3Title">Dados Profissionais</h1>
             <p class="screen-subtitle" id="screen3Subtitle">Complete seu registro profissional</p>
 
-            <!-- Formulário Nutricionista -->
-            <form id="nutricionistaForm" method="POST" action="{{ route('sobrevoce.crn') }}" class="form-section hidden">
+            <form id="nutricionistaForm" method="POST" action="{{ route('sobrevoce.crn.salvar') }}" class="form-section hidden">
                 @csrf
                 <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                <input type="hidden" name="role" value="Nutricionista">
-
                 <div class="form-group">
                     <label class="form-label" for="crn_numero">Número do CRN</label>
                     <input type="text" class="form-input" id="crn_numero" name="numero" maxlength="10" value="{{ old('numero') }}" required>
                     @error('numero')<span class="text-red-500">{{ $message }}</span>@enderror
                 </div>
-
                 <div class="form-group">
                     <label class="form-label" for="crn_regiao">Região do CRN</label>
                     <select class="form-select" id="crn_regiao" name="regiao" required>
@@ -631,26 +613,21 @@
                     </select>
                     @error('regiao')<span class="text-red-500">{{ $message }}</span>@enderror
                 </div>
-
                 <div class="action-buttons">
                     <button type="button" class="btn btn-secondary" onclick="goBack()">Voltar</button>
                     <button type="submit" class="btn btn-primary">Finalizar Cadastro</button>
                 </div>
             </form>
 
-            <!-- Formulário Personal Trainer -->
-            <form id="personalForm" method="POST" action="{{ route('user.definirCarac', ['user' => Auth::id()]) }}" class="form-section hidden">
+            <form id="personalForm" method="POST" action="{{ route('sobrevoce.cref.salvar') }}" class="form-section hidden">
                 @csrf
                 <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                <input type="hidden" name="role" value="Personal">
-
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label" for="cref_numero">Número do CREF</label>
                         <input type="text" class="form-input" id="cref_numero" name="cref_numero" maxlength="6" value="{{ old('cref_numero') }}" required>
                         @error('cref_numero')<span class="text-red-500">{{ $message }}</span>@enderror
                     </div>
-
                     <div class="form-group">
                         <label class="form-label" for="cref_categoria">Categoria</label>
                         <select class="form-select" id="cref_categoria" name="cref_categoria" required>
@@ -664,7 +641,6 @@
                         @error('cref_categoria')<span class="text-red-500">{{ $message }}</span>@enderror
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label class="form-label" for="cref_uf">Estado (UF)</label>
                     <select class="form-select" id="cref_uf" name="cref_uf" required>
@@ -675,7 +651,6 @@
                     </select>
                     @error('cref_uf')<span class="text-red-500">{{ $message }}</span>@enderror
                 </div>
-
                 <div class="action-buttons">
                     <button type="button" class="btn btn-secondary" onclick="goBack()">Voltar</button>
                     <button type="submit" class="btn btn-primary">Finalizar Cadastro</button>
@@ -715,7 +690,7 @@
         }
 
         function showProfessionalForm() {
-            if (professionalType === 'nutricionista') {
+            if (professionalType.toLowerCase() === 'nutricionista') {
                 document.getElementById('nutricionistaForm').classList.remove('hidden');
                 document.getElementById('personalForm').classList.add('hidden');
             } else {

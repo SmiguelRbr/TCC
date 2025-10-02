@@ -37,6 +37,37 @@
             --border-radius: 16px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             --max-width: 1200px;
+            --pro-nutri-bg: #e0ffe0;
+            /* Fundo verde claro para Nutricionista */
+            --pro-nutri-color: #228B22;
+            /* Texto verde escuro */
+            --pro-personal-bg: #e0f2ff;
+            /* Fundo azul claro para Personal */
+            --pro-personal-color: #1E90FF;
+            /* Texto azul vibrante */
+            --pro-artigo-bg: #fffbe0;
+            /* Fundo amarelo claro para Artigo */
+            --pro-artigo-color: #b8860b;
+            /* Texto amarelo escuro */
+            --pro-video-bg: #ffe0e0;
+            /* Fundo vermelho claro para Vídeo */
+            --pro-video-color: #CC0000;
+            /* Texto vermelho */
+            --pro-dica-bg: #e6e6fa;
+            /* Fundo roxo claro para Dica */
+            --pro-dica-color: #8A2BE2;
+            /* Texto roxo */
+            --pro-nutri-bg: #1A361A;
+            --pro-nutri-color: #6B8E23;
+            --pro-personal-bg: #1A2B3D;
+            --pro-personal-color: #4682B4;
+            --pro-artigo-bg: #3D351A;
+            --pro-artigo-color: #DAA520;
+            --pro-video-bg: #3D1A1A;
+            --pro-video-color: #FF6347;
+            --pro-dica-bg: #2B1A3D;
+            --pro-dica-color: #BA55D3;
+
         }
 
         :root.dark {
@@ -81,6 +112,152 @@
             line-height: 1.6;
             width: 100%;
             overflow-x: hidden;
+        }
+
+        .professional-badge {
+            color: gold;
+            /* Cor da estrela */
+            margin-left: 5px;
+            font-size: 1.1em;
+            vertical-align: middle;
+        }
+
+        /* ADICIONADO: Estilos para as opções de post de profissionais */
+        .post-option.pro-option-nutri {
+            background-color: var(--pro-nutri-bg);
+            color: var(--pro-nutri-color);
+            border-color: var(--pro-nutri-color);
+        }
+
+        .post-option.pro-option-nutri:hover,
+        .post-option.pro-option-nutri.active {
+            background-color: var(--pro-nutri-color);
+            color: white;
+        }
+
+        .post-option.pro-option-personal {
+            background-color: var(--pro-personal-bg);
+            color: var(--pro-personal-color);
+            border-color: var(--pro-personal-color);
+        }
+
+        .post-option.pro-option-personal:hover,
+        .post-option.pro-option-personal.active {
+            background-color: var(--pro-personal-color);
+            color: white;
+        }
+
+        .post-option.pro-option-artigo {
+            background-color: var(--pro-artigo-bg);
+            color: var(--pro-artigo-color);
+            border-color: var(--pro-artigo-color);
+        }
+
+        .post-option.pro-option-artigo:hover,
+        .post-option.pro-option-artigo.active {
+            background-color: var(--pro-artigo-color);
+            color: white;
+        }
+
+        /* ADICIONADO: Estilos para os novos badges de tipo de post */
+        .achievement-badge.badge-dica {
+            background: var(--pro-dica-color);
+            /* Usa a cor definida para dica */
+            color: white;
+        }
+
+        .achievement-badge.badge-video {
+            background: var(--pro-video-color);
+            /* Usa a cor definida para vídeo */
+            color: white;
+        }
+
+        .achievement-badge.badge-artigo {
+            background: var(--pro-artigo-color);
+            /* Usa a cor definida para artigo */
+            color: white;
+        }
+
+        /* ADICIONADO: Estilos para o Título do Artigo */
+        .article-title-display {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+            /* Ou outra cor que combine */
+        }
+
+        /* ADICIONADO: Estilos para o embed de vídeo */
+        .video-embed-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            background-color: black;
+            /* Fundo preto enquanto o vídeo não carrega */
+        }
+
+        .video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: black;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7);
+            /* Escurece a thumbnail para o botão se destacar */
+            transition: filter 0.3s ease;
+        }
+
+        .video-container:hover .video-thumbnail {
+            filter: brightness(0.5);
+        }
+
+        .video-play-btn {
+            position: absolute;
+            font-size: 3rem;
+            color: white;
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            z-index: 2;
+        }
+
+        .video-play-btn:hover {
+            background: rgba(255, 0, 0, 0.8);
+            /* Cor de hover do YouTube */
+            transform: scale(1.1);
+        }
+
+        .video-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
         }
 
         .header {
@@ -914,7 +1091,6 @@
 
     <div class="main-container">
         <main class="feed-section">
-            <!-- Formulário de criação de post -->
             <form method="POST" action="{{ route('posts.store') }}" enctype="multipart/form-data" class="create-post">
                 @csrf
 
@@ -923,6 +1099,7 @@
                     <input
                         type="text"
                         name="content"
+                        id="mainContentInput"
                         class="post-input"
                         placeholder="Compartilhe sua conquista ou peça motivação..."
                         required>
@@ -946,9 +1123,23 @@
                             <input type="radio" name="type" value="pergunta" hidden>
                             <span>❓</span> Pergunta
                         </label>
+                        
+                        @if(in_array(auth()->user()->role, ['Nutricionista', 'Personal']))
+                            <label class="post-option pro-option-nutri">
+                                <input type="radio" name="type" value="dica" hidden>
+                                <span>📝</span> Dica Rápida
+                            </label>
+                            <label class="post-option pro-option-personal">
+                                <input type="radio" name="type" value="video" hidden>
+                                <span>🎬</span> Vídeo
+                            </label>
+                             <label class="post-option pro-option-artigo">
+                                <input type="radio" name="type" value="artigo" hidden>
+                                <span>📖</span> Artigo
+                            </label>
+                        @endif
                     </div>
 
-                    <!-- Inputs adicionais -->
                     <div class="additional-inputs">
                         <input
                             type="file"
@@ -957,13 +1148,36 @@
                             id="imageInput"
                             class="additional-input"
                             style="display: none; margin-top: 10px;">
+                            
+                        <input 
+                            type="text" 
+                            name="video_url" 
+                            id="videoUrlInput" 
+                            class="additional-input" 
+                            placeholder="Cole o link do YouTube aqui..." 
+                            style="display: none;">
+
+                        <input 
+                            type="text" 
+                            name="article_title" 
+                            id="articleTitleInput" 
+                            class="additional-input" 
+                            placeholder="Título do seu artigo..." 
+                            style="display: none;">
+                        
+                        <textarea 
+                            name="article_content" 
+                            id="articleContentTextarea" 
+                            class="additional-input" 
+                            placeholder="Escreva seu artigo aqui..." 
+                            rows="5" 
+                            style="display: none;"></textarea>
                     </div>
 
                     <button type="submit" class="post-btn">Publicar</button>
                 </div>
             </form>
 
-            <!-- Listagem dos posts do banco -->
             <div class="posts-container">
                 @foreach ($posts as $post)
                 <article class="feed-post">
@@ -972,36 +1186,59 @@
                             {{ strtoupper(substr($post->user->name, 0, 2)) }}
                         </div>
                         <div class="post-user-info">
-                            <h3>{{ $post->user->name }}</h3>
+                            <h3>
+                                {{ $post->user->name }}
+                                @if(in_array($post->user->role, ['Nutricionista', 'Personal']))
+                                    <span class="professional-badge" title="Profissional">⭐</span>
+                                @endif
+                            </h3>
                             <div class="post-meta">
                                 {{ $post->user->role ?? 'Cliente' }} • {{ $post->created_at->diffForHumans() }}
                             </div>
                         </div>
-                        @if ($post->type === 'conquista')
-                        <div class="achievement-badge">🏆 Conquista</div>
+                        
+                        @if ($post->type === 'dica')
+                            <div class="achievement-badge badge-dica">📝 Dica</div>
+                        @elseif ($post->type === 'video')
+                            <div class="achievement-badge badge-video">🎬 Vídeo</div>
+                        @elseif ($post->type === 'artigo')
+                            <div class="achievement-badge badge-artigo">📖 Artigo</div>
+                        @elseif ($post->type === 'conquista')
+                            <div class="achievement-badge">🏆 Conquista</div>
                         @elseif ($post->type === 'progresso')
-                        <div class="achievement-badge">💪 Progresso</div>
+                            <div class="achievement-badge">💪 Progresso</div>
                         @elseif ($post->type === 'pergunta')
-                        <div class="achievement-badge">❓ Pergunta</div>
+                            <div class="achievement-badge">❓ Pergunta</div>
                         @elseif ($post->badge)
-                        <div class="achievement-badge">{{ $post->badge }}</div>
+                            <div class="achievement-badge">{{ $post->badge }}</div>
                         @endif
                     </header>
 
                     <div class="post-content">
-                        <p class="post-text">{{ $post->content }}</p>
+                        @if($post->type === 'artigo')
+                            <h4 class="article-title-display">{{ $post->article_title }}</h4>
+                            <p class="post-text">{{ $post->content }}</p>
+                        @elseif($post->type === 'video' && $post->video_url)
+                            <p class="post-text">{{ $post->content }}</p>
+                            <div class="video-embed-wrapper">
+                                <div class="video-container" data-video-id="{{ \App\Http\Controllers\PostController::getYouTubeId($post->video_url) }}">
+                                    <img src="https://img.youtube.com/vi/{{ \App\Http\Controllers\PostController::getYouTubeId($post->video_url) }}/hqdefault.jpg" class="video-thumbnail">
+                                    <button class="video-play-btn">▶</button>
+                                </div>
+                            </div>
+                        @else
+                            <p class="post-text">{{ $post->content }}</p>
+                        @endif
 
-                        @if ($post->image_url)
-                        <div class="image-wrapper">
-                            <img src="{{ asset($post->image_url) }}" alt="Imagem do post" class="post-image" style="display: block;">
-                        </div>
+                        @if ($post->image_url && $post->type !== 'video')
+                            <div class="image-wrapper">
+                                <img src="{{ asset($post->image_url) }}" alt="Imagem do post" class="post-image" style="display: block;">
+                            </div>
                         @endif
                     </div>
 
-                    <!-- Interações (Curtidas e Comentários) -->
                     <div class="post-interactions">
                         <div class="post-actions-bar">
-                            <!-- Botão de Curtir -->
                             <form method="POST" action="{{ route('posts.like', $post) }}" style="display: inline;">
                                 @csrf
                                 <button
@@ -1018,22 +1255,16 @@
                                     Curtir
                                 </button>
                             </form>
-
-                            <!-- Botão de Comentar -->
                             <button class="action-btn" onclick="openCommentsSidebar('{{ $post->id }}')">
                                 💬 Comentar
                             </button>
                         </div>
-
-                        <!-- Contagem de curtidas -->
                         @if ($post->likes->count() > 0)
                         <div class="likes-count">
                             <strong>{{ $post->likes->count() }}</strong>
                             {{ $post->likes->count() == 1 ? 'curtida' : 'curtidas' }}
                         </div>
                         @endif
-
-                        <!-- Preview dos comentários -->
                         @if ($post->comments->count() > 0)
                         <div class="comments-preview">
                             @if ($post->comments->count() > 2)
@@ -1041,7 +1272,6 @@
                                 Ver todos os {{ $post->comments->count() }} comentários
                             </div>
                             @endif
-
                             @foreach ($post->comments->take(2) as $comment)
                             <div class="comment-preview">
                                 <strong>{{ $comment->user->name }}</strong>{{ $comment->content }}
@@ -1052,7 +1282,6 @@
                         @endif
                     </div>
 
-                    <!-- Botão de deletar post -->
                     @if ($post->user_id === auth()->id())
                     <div class="delete-form">
                         <form method="POST" action="{{ route('posts.destroy', $post) }}">
@@ -1073,6 +1302,17 @@
         </main>
 
         <aside class="sidebar">
+            @if(in_array(auth()->user()->role, ['Nutricionista', 'Personal']))
+            <div class="sidebar-card professional-panel">
+                <h3 class="sidebar-title">Painel do Profissional</h3>
+                <ul>
+                    <li><a href="#">Meus Pacientes/Alunos</a></li>
+                    <li><a href="#">Criar Plano de Treino</a></li>
+                    <li><a href="#">Criar Plano Alimentar</a></li>
+                </ul>
+            </div>
+            @endif
+
             <div class="sidebar-card motivational-quote">
                 <h3 class="sidebar-title" style="color: white;">💫 Motivação do Dia</h3>
                 <p id="motivation-text">"O sucesso é a soma de pequenos esforços repetidos dia após dia."</p>
@@ -1080,11 +1320,6 @@
         </aside>
     </div>
 
-
-
-
-
-    <!-- Sidebar de Comentários -->
     <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeCommentsSidebar()"></div>
 
     @foreach ($posts as $post)
@@ -1145,187 +1380,237 @@
 
     <button class="floating-btn" title="Nova publicação">+</button>
 
-
-
     <script>
+        // SCRIPT CONSOLIDADO: Todos os event listeners de DOMContentLoaded em um só
         document.addEventListener('DOMContentLoaded', function() {
-
             const scrollY = localStorage.getItem('scrollY');
             if (scrollY !== null) {
                 window.scrollTo(0, parseInt(scrollY));
                 localStorage.removeItem('scrollY');
             }
 
-
+            // Lógica para Curtir
             document.querySelectorAll('.like-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const postId = this.getAttribute('data-post-id');
                     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                    const isLiked = this.getAttribute('data-liked') === '1';
-
+                    
                     fetch(`/posts/${postId}/like-ajax`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': token
-                            },
-                            body: JSON.stringify({})
-                        })
-                        .then(res => res.json())
-                        .then(data => {
-                            this.innerHTML = data.liked ? '❤️ Curtir' : '🤍 Curtir';
-                            this.setAttribute('data-liked', data.liked ? '1' : '0');
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': token
+                        },
+                        body: JSON.stringify({})
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        // Atualiza ícone e texto do botão
+                        this.innerHTML = (data.liked ? '❤️' : '🤍') + ' Curtir';
+                        this.setAttribute('data-liked', data.liked ? '1' : '0');
 
-                            // Atualiza o contador de curtidas
-                            const likesContainer = this.closest('.post-interactions').querySelector('.likes-count');
-                            if (data.likes_count > 0) {
-                                if (!likesContainer) {
-                                    const newDiv = document.createElement('div');
-                                    newDiv.className = 'likes-count';
-                                    newDiv.innerHTML = `<strong>${data.likes_count}</strong> ${data.likes_count === 1 ? 'curtida' : 'curtidas'}`;
-                                    this.closest('.post-interactions').appendChild(newDiv);
-                                } else {
-                                    likesContainer.innerHTML = `<strong>${data.likes_count}</strong> ${data.likes_count === 1 ? 'curtida' : 'curtidas'}`;
-                                }
+                        // Atualiza o contador de curtidas
+                        const likesContainer = this.closest('.post-interactions').querySelector('.likes-count');
+                        if (data.likes_count > 0) {
+                            if (!likesContainer) {
+                                // Se não existe, cria o contador de likes
+                                const newDiv = document.createElement('div');
+                                newDiv.className = 'likes-count';
+                                newDiv.innerHTML = `<strong>${data.likes_count}</strong> ${data.likes_count === 1 ? 'curtida' : 'curtidas'}`;
+                                // Insere após a barra de ações
+                                this.closest('.post-actions-bar').insertAdjacentElement('afterend', newDiv);
                             } else {
-                                if (likesContainer) likesContainer.remove();
+                                likesContainer.innerHTML = `<strong>${data.likes_count}</strong> ${data.likes_count === 1 ? 'curtida' : 'curtidas'}`;
                             }
-                        });
+                        } else {
+                            if (likesContainer) likesContainer.remove(); // Remove se não houver likes
+                        }
+                    })
+                    .catch(error => console.error('Erro ao curtir/descurtir:', error));
                 });
             });
-        });
-        let currentPostData = null;
 
-        document.querySelector('.floating-btn').addEventListener('click', function() {
-            const postInput = document.querySelector('.post-input');
-            postInput.focus();
-            postInput.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            });
-        });
-
-        const postInput = document.querySelector('.post-input');
-        postInput.addEventListener('focus', function() {
-            this.placeholder = 'O que você gostaria de compartilhar hoje?';
-        });
-        postInput.addEventListener('blur', function() {
-            this.placeholder = 'Compartilhe sua conquista ou peça motivação...';
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
+            // Lógica para as novas funcionalidades de postagem (dica, vídeo, artigo)
             const options = document.querySelectorAll('.post-option');
+            const mainContentInput = document.getElementById('mainContentInput');
+            
             const imageInput = document.getElementById('imageInput');
+            const videoUrlInput = document.getElementById('videoUrlInput');
+            const articleTitleInput = document.getElementById('articleTitleInput');
+            const articleContentTextarea = document.getElementById('articleContentTextarea');
 
             options.forEach(option => {
                 option.addEventListener('click', function() {
-                    // Remove classe active
                     options.forEach(o => o.classList.remove('active'));
                     this.classList.add('active');
                     this.querySelector('input').checked = true;
 
                     const selectedType = this.querySelector('input').value;
 
-                    // Esconde todos os campos adicionais
+                    // Reseta e esconde todos os inputs adicionais
                     imageInput.style.display = 'none';
+                    videoUrlInput.style.display = 'none';
+                    articleTitleInput.style.display = 'none';
+                    articleContentTextarea.style.display = 'none';
+                    
+                    // Reseta os valores dos inputs adicionais ao esconder
+                    imageInput.value = '';
+                    videoUrlInput.value = '';
+                    articleTitleInput.value = '';
+                    articleContentTextarea.value = '';
 
-                    // Mostra campo de imagem apenas se for tipo "foto"
+                    // Mostra o input principal por padrão e ajusta o placeholder
+                    mainContentInput.style.display = 'block'; 
+                    mainContentInput.placeholder = "Compartilhe sua conquista ou peça motivação...";
+                    mainContentInput.removeAttribute('required'); // Remove required por padrão
+
+                    // Exibe inputs/placeholders específicos para o tipo selecionado
+                    // e adiciona 'required' conforme necessário
                     if (selectedType === 'foto') {
                         imageInput.style.display = 'block';
+                        imageInput.setAttribute('required', 'required');
+                        mainContentInput.setAttribute('required', 'required');
+                    } else if (selectedType === 'video') {
+                        videoUrlInput.style.display = 'block';
+                        videoUrlInput.setAttribute('required', 'required');
+                        mainContentInput.placeholder = "Adicione uma descrição para o seu vídeo...";
+                        mainContentInput.setAttribute('required', 'required');
+                    } else if (selectedType === 'dica') {
+                        mainContentInput.placeholder = "Escreva sua dica aqui...";
+                        mainContentInput.setAttribute('required', 'required');
+                    } else if (selectedType === 'artigo') {
+                        mainContentInput.style.display = 'none'; // Esconde o input de uma linha para artigo
+                        articleTitleInput.style.display = 'block';
+                        articleTitleInput.setAttribute('required', 'required');
+                        articleContentTextarea.style.display = 'block';
+                        articleContentTextarea.setAttribute('required', 'required');
+                    } else { // Para tipos como 'conquista', 'progresso', 'pergunta'
+                         mainContentInput.setAttribute('required', 'required');
                     }
                 });
             });
-        });
 
-        function toggleImage(element) {
-            if (element.tagName === 'BUTTON') {
-                const img = element.nextElementSibling;
-                img.style.display = 'block';
-                element.style.display = 'none';
-            } else if (element.tagName === 'IMG') {
-                const btn = element.previousElementSibling;
-                element.style.display = 'none';
-                btn.style.display = 'inline-block';
+            // SCRIPT PARA O PLAYER DE VÍDEO (carrega iframe ao clicar)
+            document.querySelectorAll('.video-container').forEach(container => {
+                container.addEventListener('click', function() {
+                    const videoId = this.getAttribute('data-video-id');
+                    if (videoId) {
+                        const iframe = document.createElement('iframe');
+                        iframe.setAttribute('src', `https://www.youtube.com/embed/${videoId}?autoplay=1`);
+                        iframe.setAttribute('frameborder', '0');
+                        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+                        iframe.setAttribute('allowfullscreen', '');
+                        iframe.classList.add('video-iframe');
+                        
+                        this.parentNode.replaceChild(iframe, this); // Substitui a miniatura pelo player
+                    }
+                });
+            });
+
+            // Lógica para o botão flutuante e foco no input principal
+            const floatingBtn = document.querySelector('.floating-btn');
+            if (floatingBtn) { // Verifica se o botão existe antes de adicionar o listener
+                floatingBtn.addEventListener('click', function() {
+                    const postInput = document.querySelector('.post-input');
+                    postInput.focus();
+                    postInput.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                });
             }
-        }
 
-        const motivationalQuotes = [
-            "O sucesso é a soma de pequenos esforços repetidos dia após dia.",
-            "Sua única limitação é você mesmo.",
-            "Grandes conquistas requerem grandes ambições.",
-            "O que não te desafia, não te transforma.",
-            "Cada dia é uma nova oportunidade para ser melhor.",
-            "Disciplina é liberdade.",
-            "Você é mais forte do que imagina."
-        ];
+            // Placeholder dinâmico do input principal
+            const postInputPlaceholder = document.querySelector('.post-input');
+            if (postInputPlaceholder) { // Verifica se o input existe
+                postInputPlaceholder.addEventListener('focus', function() {
+                    this.placeholder = 'O que você gostaria de compartilhar hoje?';
+                });
+                postInputPlaceholder.addEventListener('blur', function() {
+                    this.placeholder = 'Compartilhe sua conquista ou peça motivação...';
+                });
+            }
 
-        function updateMotivation() {
-            const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
-            document.getElementById('motivation-text').textContent = `"${randomQuote}"`;
-        }
+            // Atualização de citação motivacional
+            const motivationalQuotes = [
+                "O sucesso é a soma de pequenos esforços repetidos dia após dia.",
+                "Sua única limitação é você mesmo.",
+                "Grandes conquistas requerem grandes ambições.",
+                "O que não te desafia, não te transforma.",
+                "Cada dia é uma nova oportunidade para ser melhor.",
+                "Disciplina é liberdade.",
+                "Você é mais forte do que imagina."
+            ];
 
-        setInterval(updateMotivation, 30000);
-
-        function openCommentsSidebar(postId) {
-            const sidebar = document.getElementById('commentsSidebar-' + postId);
-            const backdrop = document.getElementById('sidebarBackdrop');
-
-            // Esconde todas as outras sidebars
-            document.querySelectorAll('.comments-sidebar').forEach(s => s.classList.remove('open'));
-
-            // Mostra a sidebar do post específico
-            sidebar.classList.add('open');
-            backdrop.classList.add('show');
-            document.body.style.overflow = 'hidden';
-
-            // Foca no input de comentário
-            setTimeout(() => {
-                const commentInput = sidebar.querySelector('.comment-input');
-                if (commentInput) {
-                    commentInput.focus();
+            function updateMotivation() {
+                const motivationTextElement = document.getElementById('motivation-text');
+                if (motivationTextElement) { // Verifica se o elemento existe
+                    const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+                    motivationTextElement.textContent = `"${randomQuote}"`;
                 }
-            }, 300);
-        }
+            }
 
-        function closeCommentsSidebar(postId = null) {
-            const backdrop = document.getElementById('sidebarBackdrop');
+            updateMotivation(); // Chama a função uma vez no carregamento
+            setInterval(updateMotivation, 30000); // Depois, a cada 30 segundos
 
-            if (postId) {
+            // Lógica de abertura e fechamento da sidebar de comentários
+            function openCommentsSidebar(postId) {
                 const sidebar = document.getElementById('commentsSidebar-' + postId);
-                sidebar.classList.remove('open');
-            } else {
-                // Fecha todas as sidebars
-                document.querySelectorAll('.comments-sidebar').forEach(s => s.classList.remove('open'));
+                const backdrop = document.getElementById('sidebarBackdrop');
+
+                if (sidebar && backdrop) { // Verifica se os elementos existem
+                    document.querySelectorAll('.comments-sidebar').forEach(s => s.classList.remove('open'));
+                    sidebar.classList.add('open');
+                    backdrop.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+
+                    setTimeout(() => {
+                        const commentInput = sidebar.querySelector('.comment-input');
+                        if (commentInput) {
+                            commentInput.focus();
+                        }
+                    }, 300);
+                }
             }
+            window.openCommentsSidebar = openCommentsSidebar; // Disponibiliza globalmente
 
-            backdrop.classList.remove('show');
-            document.body.style.overflow = '';
-        }
+            function closeCommentsSidebar(postId = null) {
+                const backdrop = document.getElementById('sidebarBackdrop');
 
-        // ESC fecha a sidebar
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeCommentsSidebar();
+                if (backdrop) { // Verifica se o backdrop existe
+                    if (postId) {
+                        const sidebar = document.getElementById('commentsSidebar-' + postId);
+                        if (sidebar) sidebar.classList.remove('open');
+                    } else {
+                        document.querySelectorAll('.comments-sidebar').forEach(s => s.classList.remove('open'));
+                    }
+
+                    backdrop.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
             }
-        });
+            window.closeCommentsSidebar = closeCommentsSidebar; // Disponibiliza globalmente
 
-        // Previne fechamento ao clicar dentro da sidebar
-        document.getElementById('commentsSidebar').addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
-
-        function saveScrollPositionAndSubmit(event, form) {
-            localStorage.setItem('scrollY', window.scrollY);
-            form.submit();
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const scrollY = localStorage.getItem('scrollY');
-            if (scrollY !== null) {
-                window.scrollTo(0, parseInt(scrollY));
-                localStorage.removeItem('scrollY');
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    closeCommentsSidebar();
+                }
+            });
+            
+            // Impede fechamento ao clicar dentro da sidebar
+            document.querySelectorAll('.comments-sidebar').forEach(sidebar => {
+                 sidebar.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            });
+           
+            function saveScrollPositionAndSubmit(event, form) {
+                localStorage.setItem('scrollY', window.scrollY);
+                form.submit();
             }
-        });
+            window.saveScrollPositionAndSubmit = saveScrollPositionAndSubmit; // Disponibiliza globalmente
+
+        }); // Fim do único DOMContentLoaded
     </script>
 </body>
 

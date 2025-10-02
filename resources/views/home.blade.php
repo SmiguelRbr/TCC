@@ -615,9 +615,7 @@
         </div>
       </div>
       <nav>
-        <a href="perfil.html">Perfil</a>
-        <a href="dicas.html">Dicas</a>
-        <a href="calculadora.html">Calculadora</a>
+        <a href="{{ route('profile.show') }}">Perfil</a>
         <a href="{{ route('posts.index') }}">Feed</a>
         @guest
         <a href="{{ route('login') }}" class="btn">Entrar</a>
@@ -658,25 +656,25 @@
     <section class="cards-section">
       <div class="container">
         <div class="cards">
-          <a href="perfil.html" class="card fade-in-up">
+          <a href="#" class="card fade-in-up">
             <div class="card-icon">👨‍⚕️</div>
             <h3>Perfil de Profissional</h3>
             <p>Encontre e conecte-se com especialistas em saúde, nutrição e bem-estar verificados.</p>
           </a>
 
-          <a href="dicas.html" class="card fade-in-up">
+          <a href="#" class="card fade-in-up">
             <div class="card-icon">💡</div>
             <h3>Dicas Personalizadas</h3>
             <p>Conteúdos exclusivos e dicas práticas baseadas no seu perfil e objetivos.</p>
           </a>
 
-          <a href="calculadora.html" class="card fade-in-up">
+          <a href="#" class="card fade-in-up">
             <div class="card-icon">📊</div>
             <h3>Calculadoras Inteligentes</h3>
             <p>Calcule IMC, TMB, metas calóricas e acompanhe seu progresso com precisão.</p>
           </a>
 
-          <a href="feed.html" class="card fade-in-up">
+          <a href="#" class="card fade-in-up">
             <div class="card-icon">📱</div>
             <h3>Feed Interativo</h3>
             <p>Compartilhe conquistas, receba motivação e conecte-se com a comunidade.</p>

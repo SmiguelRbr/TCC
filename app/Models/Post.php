@@ -15,6 +15,8 @@ class Post extends Model
         'image_url',
         'badge',
         'type',
+        'video_url',     // <-- ADICIONE ESTA LINHA
+        'article_title'
     ];
 
     // Relacionamento: Post pertence a um User
